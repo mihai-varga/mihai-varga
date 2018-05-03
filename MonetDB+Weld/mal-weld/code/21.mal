@@ -1,0 +1,127 @@
++-------------------------------------------------------------------------------------------------------------------------------------+
+| mal                                                                                                                                 |
++=====================================================================================================================================+
+| function user.s2_1():void;                                                                                                          |
+|     X_3:void := querylog.define("explain\nselect\n s_name,\n count(*) as numwait\nfrom\n supplier,\n lineitem l1,\n orders,\n natio |
+: n\nwhere\n s_suppkey = l1.l_suppkey\n and o_orderkey = l1.l_orderkey\n and o_orderstatus = \\'F\\'\n and l1.l_receiptdate > l1.l_co :
+: mmitdate\n and exists (\n select\n *\n from\n lineitem l2\n where\n l2.l_orderkey = l1.l_orderkey\n and l2.l_suppkey <> l1.l_suppke :
+: y\n )\n and not exists (\n select\n *\n from\n lineitem l3\n where\n l3.l_orderkey = l1.l_orderkey\n and l3.l_suppkey <> l1.l_suppk :
+: ey\n and l3.l_receiptdate > l3.l_commitdate\n )\n and s_nationkey = n_nationkey\n and n_name = \\'SAUDI ARABIA\\'\ngroup by\n s_nam :
+: e\norder by\n numwait desc,\n s_name\nlimit 100;":str, "default_pipe":str, 229:int);                                                :
+|     X_314:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_320:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_318:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_317:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_316:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_6:int := sql.mvc();                                                                                                           |
+|     C_9:bat[:oid] := sql.tid(X_6:int, "sys":str, "orders":str);                                                                     |
+|     X_22:bat[:str] := sql.bind(X_6:int, "sys":str, "orders":str, "o_orderstatus":str, 0:int);                                       |
+|     X_28:bat[:str] := algebra.projection(C_9:bat[:oid], X_22:bat[:str]);                                                            |
+|     C_30:bat[:oid] := algebra.thetaselect(X_28:bat[:str], "F":str, "==":str);                                                       |
+|     X_12:bat[:int] := sql.bind(X_6:int, "sys":str, "orders":str, "o_orderkey":str, 0:int);                                          |
+|     X_32:bat[:int] := algebra.projectionpath(C_30:bat[:oid], C_9:bat[:oid], X_12:bat[:int]);                                        |
+|     C_34:bat[:oid] := sql.tid(X_6:int, "sys":str, "lineitem":str);                                                                  |
+|     X_57:bat[:date] := sql.bind(X_6:int, "sys":str, "lineitem":str, "l_receiptdate":str, 0:int);                                    |
+|     X_63:bat[:date] := algebra.projection(C_34:bat[:oid], X_57:bat[:date]);                                                         |
+|     X_50:bat[:date] := sql.bind(X_6:int, "sys":str, "lineitem":str, "l_commitdate":str, 0:int);                                     |
+|     X_56:bat[:date] := algebra.projection(C_34:bat[:oid], X_50:bat[:date]);                                                         |
+|     X_64:bat[:bit] := batcalc.>(X_63:bat[:date], X_56:bat[:date]);                                                                  |
+|     C_67:bat[:oid] := algebra.select(X_64:bat[:bit], true:bit, true:bit, true:bit, true:bit, false:bit);                            |
+|     X_36:bat[:int] := sql.bind(X_6:int, "sys":str, "lineitem":str, "l_orderkey":str, 0:int);                                        |
+|     X_42:bat[:int] := algebra.projection(C_34:bat[:oid], X_36:bat[:int]);                                                           |
+|     X_71:bat[:int] := algebra.projection(C_67:bat[:oid], X_42:bat[:int]);                                                           |
+|     (X_75:bat[:oid], X_76:bat[:oid]) := algebra.join(X_32:bat[:int], X_71:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);         |
+|     X_43:bat[:int] := sql.bind(X_6:int, "sys":str, "lineitem":str, "l_suppkey":str, 0:int);                                         |
+|     X_49:bat[:int] := algebra.projection(C_34:bat[:oid], X_43:bat[:int]);                                                           |
+|     X_72:bat[:int] := algebra.projection(C_67:bat[:oid], X_49:bat[:int]);                                                           |
+|     X_83:bat[:int] := algebra.projection(X_76:bat[:oid], X_72:bat[:int]);                                                           |
+|     C_86:bat[:oid] := sql.tid(X_6:int, "sys":str, "supplier":str);                                                                  |
+|     X_88:bat[:int] := sql.bind(X_6:int, "sys":str, "supplier":str, "s_suppkey":str, 0:int);                                         |
+|     X_94:bat[:int] := algebra.projection(C_86:bat[:oid], X_88:bat[:int]);                                                           |
+|     (X_109:bat[:oid], X_110:bat[:oid]) := algebra.join(X_83:bat[:int], X_94:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);       |
+|     X_102:bat[:int] := sql.bind(X_6:int, "sys":str, "supplier":str, "s_nationkey":str, 0:int);                                      |
+|     X_123:bat[:int] := algebra.projectionpath(X_110:bat[:oid], C_86:bat[:oid], X_102:bat[:int]);                                    |
+|     C_124:bat[:oid] := sql.tid(X_6:int, "sys":str, "nation":str);                                                                   |
+|     X_133:bat[:str] := sql.bind(X_6:int, "sys":str, "nation":str, "n_name":str, 0:int);                                             |
+|     X_139:bat[:str] := algebra.projection(C_124:bat[:oid], X_133:bat[:str]);                                                        |
+|     C_147:bat[:oid] := algebra.thetaselect(X_139:bat[:str], "SAUDI ARABIA":str, "==":str);                                          |
+|     X_126:bat[:int] := sql.bind(X_6:int, "sys":str, "nation":str, "n_nationkey":str, 0:int);                                        |
+|     X_149:bat[:int] := algebra.projectionpath(C_147:bat[:oid], C_124:bat[:oid], X_126:bat[:int]);                                   |
+|     (X_151:bat[:oid], X_152:bat[:oid]) := algebra.join(X_123:bat[:int], X_149:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);     |
+|     X_163:bat[:int] := algebra.projectionpath(X_151:bat[:oid], X_110:bat[:oid], X_94:bat[:int]);                                    |
+|     X_201:bat[:oid] := bat.mirror(X_163:bat[:int]);                                                                                 |
+|     X_159:bat[:int] := algebra.projectionpath(X_151:bat[:oid], X_109:bat[:oid], X_76:bat[:oid], X_71:bat[:int]);                    |
+|     (X_182:bat[:oid], X_183:bat[:oid]) := algebra.join(X_159:bat[:int], X_42:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);      |
+|     X_192:bat[:int] := algebra.projection(X_183:bat[:oid], X_49:bat[:int]);                                                         |
+|     X_160:bat[:int] := algebra.projectionpath(X_151:bat[:oid], X_109:bat[:oid], X_83:bat[:int]);                                    |
+|     X_188:bat[:int] := algebra.projection(X_182:bat[:oid], X_160:bat[:int]);                                                        |
+|     X_193:bat[:bit] := batcalc.!=(X_192:bat[:int], X_188:bat[:int]);                                                                |
+|     C_196:bat[:oid] := algebra.select(X_193:bat[:bit], true:bit, true:bit, true:bit, true:bit, false:bit);                          |
+|     X_200:bat[:oid] := algebra.projection(C_196:bat[:oid], X_182:bat[:oid]);                                                        |
+|     C_202:bat[:oid] := algebra.intersect(X_201:bat[:oid], X_200:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng);                   |
+|     X_206:bat[:int] := algebra.projection(C_202:bat[:oid], X_163:bat[:int]);                                                        |
+|     X_270:bat[:oid] := bat.mirror(X_206:bat[:int]);                                                                                 |
+|     X_209:bat[:int] := algebra.projection(C_202:bat[:oid], X_159:bat[:int]);                                                        |
+|     (X_252:bat[:oid], X_253:bat[:oid]) := algebra.join(X_209:bat[:int], X_71:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);      |
+|     X_263:bat[:int] := algebra.projection(X_253:bat[:oid], X_72:bat[:int]);                                                         |
+|     X_260:bat[:int] := algebra.projectionpath(X_252:bat[:oid], C_202:bat[:oid], X_160:bat[:int]);                                   |
+|     X_266:bat[:bit] := batcalc.!=(X_263:bat[:int], X_260:bat[:int]);                                                                |
+|     C_268:bat[:oid] := algebra.select(X_266:bat[:bit], true:bit, true:bit, true:bit, true:bit, false:bit);                          |
+|     X_269:bat[:oid] := algebra.projection(C_268:bat[:oid], X_252:bat[:oid]);                                                        |
+|     X_271:bat[:oid] := algebra.difference(X_270:bat[:oid], X_269:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng);                  |
+|     X_95:bat[:str] := sql.bind(X_6:int, "sys":str, "supplier":str, "s_name":str, 0:int);                                            |
+|     X_273:bat[:str] := algebra.projectionpath(X_271:bat[:oid], C_202:bat[:oid], X_151:bat[:oid], X_110:bat[:oid], C_86:bat[:oid], X |
+: _95:bat[:str]);                                                                                                                     :
+|     (X_277:bat[:oid], C_278:bat[:oid], X_279:bat[:lng]) := group.groupdone(X_273:bat[:str]);                                        |
+|     X_280:bat[:str] := algebra.projection(C_278:bat[:oid], X_273:bat[:str]);                                                        |
+|     X_281:bat[:lng] := aggr.subcount(X_277:bat[:oid], X_277:bat[:oid], C_278:bat[:oid], false:bit);                                 |
+|     (C_286:bat[:oid], X_287:bat[:oid]) := algebra.firstn(X_281:bat[:lng], 100:lng, false:bit, false:bit);                           |
+|     C_290:bat[:oid] := algebra.firstn(X_280:bat[:str], C_286:bat[:oid], X_287:bat[:oid], 100:lng, true:bit, false:bit);             |
+|     X_292:bat[:str] := algebra.projection(C_290:bat[:oid], X_280:bat[:str]);                                                        |
+|     X_293:bat[:lng] := algebra.projection(C_290:bat[:oid], X_281:bat[:lng]);                                                        |
+|     (X_296:bat[:lng], X_297:bat[:oid], X_298:bat[:oid]) := algebra.sort(X_293:bat[:lng], true:bit, false:bit);                      |
+|     (X_299:bat[:str], X_300:bat[:oid], X_301:bat[:oid]) := algebra.sort(X_292:bat[:str], X_297:bat[:oid], X_298:bat[:oid], false:bi |
+: t, false:bit);                                                                                                                      :
+|     X_302:bat[:str] := algebra.projection(X_300:bat[:oid], X_292:bat[:str]);                                                        |
+|     C_310:bat[:oid] := algebra.subslice(X_302:bat[:str], 0:lng, 99:lng);                                                            |
+|     X_312:bat[:lng] := algebra.projectionpath(C_310:bat[:oid], X_300:bat[:oid], X_293:bat[:lng]);                                   |
+|     X_311:bat[:str] := algebra.projection(C_310:bat[:oid], X_302:bat[:str]);                                                        |
+|     X_321:bat[:str] := bat.append(X_314:bat[:str], "sys.supplier":str);                                                             |
+|     X_323:bat[:str] := bat.append(X_316:bat[:str], "s_name":str);                                                                   |
+|     X_325:bat[:str] := bat.append(X_317:bat[:str], "char":str);                                                                     |
+|     X_327:bat[:int] := bat.append(X_318:bat[:int], 25:int);                                                                         |
+|     X_329:bat[:int] := bat.append(X_320:bat[:int], 0:int);                                                                          |
+|     X_331:bat[:str] := bat.append(X_321:bat[:str], "sys.L23":str);                                                                  |
+|     X_333:bat[:str] := bat.append(X_323:bat[:str], "numwait":str);                                                                  |
+|     X_335:bat[:str] := bat.append(X_325:bat[:str], "bigint":str);                                                                   |
+|     X_337:bat[:int] := bat.append(X_327:bat[:int], 64:int);                                                                         |
+|     X_339:bat[:int] := bat.append(X_329:bat[:int], 0:int);                                                                          |
+|     sql.resultSet(X_331:bat[:str], X_333:bat[:str], X_335:bat[:str], X_337:bat[:int], X_339:bat[:int], X_311:bat[:str], X_312:bat[: |
+: lng]);                                                                                                                              :
+| end user.s2_1;                                                                                                                      |
+| #inline               actions= 0 time=5 usec                                                                                        |
+| #remap                actions= 5 time=245 usec                                                                                      |
+| #costmodel            actions= 1 time=6 usec                                                                                        |
+| #coercion             actions= 5 time=28 usec                                                                                       |
+| #evaluate             actions= 7 time=79 usec                                                                                       |
+| #emptybind            actions=17 time=34 usec                                                                                       |
+| #pushselect           actions= 0 time=11 usec                                                                                       |
+| #aliases              actions=24 time=26 usec                                                                                       |
+| #mergetable           actions= 0 time=191 usec                                                                                      |
+| #deadcode             actions=79 time=45 usec                                                                                       |
+| #aliases              actions= 0 time=0 usec                                                                                        |
+| #constants            actions=43 time=31 usec                                                                                       |
+| #commonTerms          actions=18 time=30 usec                                                                                       |
+| #projectionpath       actions=13 time=34 usec                                                                                       |
+| #deadcode             actions=31 time=26 usec                                                                                       |
+| #reorder              actions= 1 time=61 usec                                                                                       |
+| #matpack              actions= 0 time=1 usec                                                                                        |
+| #multiplex            actions= 0 time=4 usec                                                                                        |
+| #profiler             actions=1 time=3 usec                                                                                         |
+| #candidates           actions=1 time=3 usec                                                                                         |
+| #deadcode             actions= 0 time=17 usec                                                                                       |
+| #wlc                  actions= 0 time=0 usec                                                                                        |
+| #garbagecollector     actions= 1 time=174 usec                                                                                      |
+| #total                actions=28 time=1326 usec                                                                                     |
++-------------------------------------------------------------------------------------------------------------------------------------+
+114 tuples

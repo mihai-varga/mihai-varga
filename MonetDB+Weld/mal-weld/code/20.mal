@@ -1,0 +1,134 @@
++-------------------------------------------------------------------------------------------------------------------------------------+
+| mal                                                                                                                                 |
++=====================================================================================================================================+
+| function user.main():void;                                                                                                          |
+|     X_12:void := querylog.define("explain\nselect\n s_name,\n s_address\nfrom\n supplier,\n nation\nwhere\n s_suppkey in (\n select |
+: \n ps_suppkey\n from\n partsupp\n where\n ps_partkey in (\n select\n p_partkey\n from\n part\n where\n p_name like 'forest%'\n )\n  :
+: and ps_availqty > (\n select\n 0.5 * sum(l_quantity)\n from\n lineitem\n where\n l_partkey = ps_partkey\n and l_suppkey = ps_suppke :
+: y\n and l_shipdate >= date '1994-01-01'\n and l_shipdate < date '1994-01-01' + interval '1' year\n )\n )\n and s_nationkey = n_nati :
+: onkey\n and n_name = 'CANADA'\norder by\n s_name;":str, "default_pipe":str, 192:int);                                               :
+|     X_268:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_274:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_272:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_271:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_270:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_15:int := sql.mvc();                                                                                                          |
+|     C_16:bat[:oid] := sql.tid(X_15:int, "sys":str, "supplier":str);                                                                 |
+|     X_19:bat[:int] := sql.bind(X_15:int, "sys":str, "supplier":str, "s_suppkey":str, 0:int);                                        |
+|     X_28:bat[:int] := algebra.projection(C_16:bat[:oid], X_19:bat[:int]);                                                           |
+|     X_228:bat[:oid] := bat.mirror(X_28:bat[:int]);                                                                                  |
+|     C_50:bat[:oid] := sql.tid(X_15:int, "sys":str, "partsupp":str);                                                                 |
+|     X_52:bat[:int] := sql.bind(X_15:int, "sys":str, "partsupp":str, "ps_partkey":str, 0:int);                                       |
+|     X_58:bat[:int] := algebra.projection(C_50:bat[:oid], X_52:bat[:int]);                                                           |
+|     X_107:bat[:oid] := bat.mirror(X_58:bat[:int]);                                                                                  |
+|     C_80:bat[:oid] := sql.tid(X_15:int, "sys":str, "part":str);                                                                     |
+|     X_89:bat[:str] := sql.bind(X_15:int, "sys":str, "part":str, "p_name":str, 0:int);                                               |
+|     X_95:bat[:str] := algebra.projection(C_80:bat[:oid], X_89:bat[:str]);                                                           |
+|     C_99:bat[:oid] := algebra.likeselect(X_95:bat[:str], nil:BAT, "forest%":str, "":str, false:bit);                                |
+|     X_82:bat[:int] := sql.bind(X_15:int, "sys":str, "part":str, "p_partkey":str, 0:int);                                            |
+|     X_102:bat[:int] := algebra.projectionpath(C_99:bat[:oid], C_80:bat[:oid], X_82:bat[:int]);                                      |
+|     (X_104:bat[:oid], X_105:bat[:oid]) := algebra.join(X_58:bat[:int], X_102:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);      |
+|     C_108:bat[:oid] := algebra.intersect(X_107:bat[:oid], X_104:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng);                   |
+|     X_73:bat[:lng] := sql.bind_idxbat(X_15:int, "sys":str, "partsupp":str, "partsupp_ps_partkey_ps_suppkey_pkey":str, 0:int);       |
+|     (X_76:bat[:oid], X_77:bat[:lng]) := sql.bind_idxbat(X_15:int, "sys":str, "partsupp":str, "partsupp_ps_partkey_ps_suppkey_pkey": |
+: str, 2:int);                                                                                                                        :
+|     X_75:bat[:lng] := sql.bind_idxbat(X_15:int, "sys":str, "partsupp":str, "partsupp_ps_partkey_ps_suppkey_pkey":str, 1:int);       |
+|     X_78:bat[:lng] := sql.delta(X_73:bat[:lng], X_76:bat[:oid], X_77:bat[:lng], X_75:bat[:lng]);                                    |
+|     X_112:bat[:lng] := algebra.projectionpath(C_108:bat[:oid], C_50:bat[:oid], X_78:bat[:lng]);                                     |
+|     C_116:bat[:oid] := sql.tid(X_15:int, "sys":str, "lineitem":str);                                                                |
+|     X_139:bat[:date] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_shipdate":str, 0:int);                                     |
+|     X_145:bat[:date] := algebra.projection(C_116:bat[:oid], X_139:bat[:date]);                                                      |
+|     C_150:bat[:oid] := algebra.select(X_145:bat[:date], "1994-01-01":date, "1995-01-01":date, true:bit, false:bit, false:bit);      |
+|     X_118:bat[:int] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_partkey":str, 0:int);                                       |
+|     X_154:bat[:int] := algebra.projectionpath(C_150:bat[:oid], C_116:bat[:oid], X_118:bat[:int]);                                   |
+|     X_160:bat[:lng] := batmkey.hash(X_154:bat[:int]);                                                                               |
+|     X_125:bat[:int] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_suppkey":str, 0:int);                                       |
+|     X_155:bat[:int] := algebra.projectionpath(C_150:bat[:oid], C_116:bat[:oid], X_125:bat[:int]);                                   |
+|     X_163:bat[:lng] := mkey.bulk_rotate_xor_hash(X_160:bat[:lng], 22:int, X_155:bat[:int]);                                         |
+|     (X_173:bat[:oid], X_174:bat[:oid]) := algebra.join(X_112:bat[:lng], X_163:bat[:lng], nil:BAT, nil:BAT, false:bit, nil:lng);     |
+|     X_109:bat[:int] := algebra.projection(C_108:bat[:oid], X_58:bat[:int]);                                                         |
+|     X_175:bat[:int] := algebra.projection(X_173:bat[:oid], X_109:bat[:int]);                                                        |
+|     X_176:bat[:int] := algebra.projection(X_174:bat[:oid], X_154:bat[:int]);                                                        |
+|     X_177:bat[:bit] := batcalc.==(X_175:bat[:int], X_176:bat[:int]);                                                                |
+|     C_181:bat[:oid] := algebra.thetaselect(X_177:bat[:bit], true:bit, "==":str);                                                    |
+|     X_182:bat[:oid] := algebra.projection(C_181:bat[:oid], X_173:bat[:oid]);                                                        |
+|     X_59:bat[:int] := sql.bind(X_15:int, "sys":str, "partsupp":str, "ps_suppkey":str, 0:int);                                       |
+|     X_110:bat[:int] := algebra.projectionpath(C_108:bat[:oid], C_50:bat[:oid], X_59:bat[:int]);                                     |
+|     X_184:bat[:int] := algebra.projection(X_182:bat[:oid], X_110:bat[:int]);                                                        |
+|     X_183:bat[:oid] := algebra.projection(C_181:bat[:oid], X_174:bat[:oid]);                                                        |
+|     X_185:bat[:int] := algebra.projection(X_183:bat[:oid], X_155:bat[:int]);                                                        |
+|     X_186:bat[:bit] := batcalc.==(X_184:bat[:int], X_185:bat[:int]);                                                                |
+|     C_189:bat[:oid] := algebra.thetaselect(X_186:bat[:bit], true:bit, "==":str);                                                    |
+|     X_190:bat[:oid] := algebra.projection(C_189:bat[:oid], X_182:bat[:oid]);                                                        |
+|     X_113:bat[:oid] := batcalc.identity(X_109:bat[:int]);                                                                           |
+|     X_196:bat[:oid] := algebra.projection(X_190:bat[:oid], X_113:bat[:oid]);                                                        |
+|     (X_201:bat[:oid], C_202:bat[:oid], X_203:bat[:lng]) := group.groupdone(X_196:bat[:oid]);                                        |
+|     X_66:bat[:int] := sql.bind(X_15:int, "sys":str, "partsupp":str, "ps_availqty":str, 0:int);                                      |
+|     X_205:bat[:int] := algebra.projectionpath(C_202:bat[:oid], X_190:bat[:oid], C_108:bat[:oid], C_50:bat[:oid], X_66:bat[:int]);   |
+|     X_132:bat[:lng] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_quantity":str, 0:int);                                      |
+|     X_199:bat[:lng] := algebra.projectionpath(C_189:bat[:oid], X_183:bat[:oid], C_150:bat[:oid], C_116:bat[:oid], X_132:bat[:lng]); |
+|     X_207:bat[:lng] := aggr.subsum(X_199:bat[:lng], X_201:bat[:oid], C_202:bat[:oid], true:bit, true:bit);                          |
+|     X_211:bat[:lng] := batcalc.lng(X_205:bat[:int], 18:int, 3:int);                                                                 |
+|     X_209:bat[:lng] := batcalc.*(X_207:bat[:lng], 5:bte);                                                                           |
+|     X_216:bat[:bit] := batcalc.>(X_211:bat[:lng], X_209:bat[:lng]);                                                                 |
+|     C_218:bat[:oid] := algebra.select(X_216:bat[:bit], true:bit, true:bit, true:bit, true:bit, false:bit);                          |
+|     X_220:bat[:int] := algebra.projectionpath(C_218:bat[:oid], C_202:bat[:oid], X_190:bat[:oid], X_110:bat[:int]);                  |
+|     (X_223:bat[:oid], X_224:bat[:oid]) := algebra.join(X_28:bat[:int], X_220:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);      |
+|     C_229:bat[:oid] := algebra.intersect(X_228:bat[:oid], X_223:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng);                   |
+|     X_43:bat[:oid] := sql.bind_idxbat(X_15:int, "sys":str, "supplier":str, "supplier_s_nationkey_fkey":str, 0:int);                 |
+|     (X_46:bat[:oid], X_47:bat[:oid]) := sql.bind_idxbat(X_15:int, "sys":str, "supplier":str, "supplier_s_nationkey_fkey":str, 2:int |
+: );                                                                                                                                  :
+|     X_45:bat[:oid] := sql.bind_idxbat(X_15:int, "sys":str, "supplier":str, "supplier_s_nationkey_fkey":str, 1:int);                 |
+|     X_48:bat[:oid] := sql.delta(X_43:bat[:oid], X_46:bat[:oid], X_47:bat[:oid], X_45:bat[:oid]);                                    |
+|     X_233:bat[:oid] := algebra.projectionpath(C_229:bat[:oid], C_16:bat[:oid], X_48:bat[:oid]);                                     |
+|     C_234:bat[:oid] := sql.tid(X_15:int, "sys":str, "nation":str);                                                                  |
+|     X_236:bat[:str] := sql.bind(X_15:int, "sys":str, "nation":str, "n_name":str, 0:int);                                            |
+|     X_242:bat[:str] := algebra.projection(C_234:bat[:oid], X_236:bat[:str]);                                                        |
+|     C_249:bat[:oid] := algebra.thetaselect(X_242:bat[:str], "CANADA":str, "==":str);                                                |
+|     X_252:bat[:oid] := algebra.projection(C_249:bat[:oid], C_234:bat[:oid]);                                                        |
+|     (X_253:bat[:oid], X_254:bat[:oid]) := algebra.join(X_233:bat[:oid], X_252:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng);     |
+|     X_29:bat[:str] := sql.bind(X_15:int, "sys":str, "supplier":str, "s_name":str, 0:int);                                           |
+|     X_257:bat[:str] := algebra.projectionpath(X_253:bat[:oid], C_229:bat[:oid], C_16:bat[:oid], X_29:bat[:str]);                    |
+|     (X_262:bat[:str], X_263:bat[:oid], X_264:bat[:oid]) := algebra.sort(X_257:bat[:str], false:bit, false:bit);                     |
+|     X_36:bat[:str] := sql.bind(X_15:int, "sys":str, "supplier":str, "s_address":str, 0:int);                                        |
+|     X_266:bat[:str] := algebra.projectionpath(X_263:bat[:oid], X_253:bat[:oid], C_229:bat[:oid], C_16:bat[:oid], X_36:bat[:str]);   |
+|     X_265:bat[:str] := algebra.projection(X_263:bat[:oid], X_257:bat[:str]);                                                        |
+|     X_275:bat[:str] := bat.append(X_268:bat[:str], "sys.supplier":str);                                                             |
+|     X_277:bat[:str] := bat.append(X_270:bat[:str], "s_name":str);                                                                   |
+|     X_279:bat[:str] := bat.append(X_271:bat[:str], "char":str);                                                                     |
+|     X_281:bat[:int] := bat.append(X_272:bat[:int], 25:int);                                                                         |
+|     X_283:bat[:int] := bat.append(X_274:bat[:int], 0:int);                                                                          |
+|     X_285:bat[:str] := bat.append(X_275:bat[:str], "sys.supplier":str);                                                             |
+|     X_286:bat[:str] := bat.append(X_277:bat[:str], "s_address":str);                                                                |
+|     X_288:bat[:str] := bat.append(X_279:bat[:str], "varchar":str);                                                                  |
+|     X_290:bat[:int] := bat.append(X_281:bat[:int], 40:int);                                                                         |
+|     X_292:bat[:int] := bat.append(X_283:bat[:int], 0:int);                                                                          |
+|     sql.resultSet(X_285:bat[:str], X_286:bat[:str], X_288:bat[:str], X_290:bat[:int], X_292:bat[:int], X_265:bat[:str], X_266:bat[: |
+: str]);                                                                                                                              :
+| end user.main;                                                                                                                      |
+| #inline               actions= 0 time=4 usec                                                                                        |
+| #remap                actions= 7 time=106 usec                                                                                      |
+| #costmodel            actions= 1 time=4 usec                                                                                        |
+| #coercion             actions= 4 time=21 usec                                                                                       |
+| #evaluate             actions=14 time=60 usec                                                                                       |
+| #emptybind            actions=13 time=33 usec                                                                                       |
+| #pushselect           actions= 0 time=4 usec                                                                                        |
+| #aliases              actions=27 time=22 usec                                                                                       |
+| #mergetable           actions= 0 time=141 usec                                                                                      |
+| #deadcode             actions=45 time=30 usec                                                                                       |
+| #aliases              actions= 0 time=1 usec                                                                                        |
+| #constants            actions=26 time=44 usec                                                                                       |
+| #commonTerms          actions= 0 time=22 usec                                                                                       |
+| #projectionpath       actions=18 time=41 usec                                                                                       |
+| #deadcode             actions=19 time=31 usec                                                                                       |
+| #reorder              actions= 1 time=65 usec                                                                                       |
+| #matpack              actions= 0 time=1 usec                                                                                        |
+| #multiplex            actions= 0 time=3 usec                                                                                        |
+| #profiler             actions=1 time=2 usec                                                                                         |
+| #candidates           actions=1 time=2 usec                                                                                         |
+| #deadcode             actions= 0 time=17 usec                                                                                       |
+| #wlc                  actions= 0 time=0 usec                                                                                        |
+| #garbagecollector     actions= 1 time=148 usec                                                                                      |
+| #total                actions=28 time=994 usec                                                                                      |
++-------------------------------------------------------------------------------------------------------------------------------------+
+122 tuples

@@ -1,0 +1,796 @@
+|v161:vec[i64], v161hseqbase:i64, v163:vec[i32], v163hseqbase:i64, v26:vec[i64], v26hseqbase:i64, v46:vec[i64], v46hseqbase:i64, v39:vec[u16], v39hseqbase:i64, v39str:vec[i8], v39stroffset:i64, v29:vec[i32], v29hseqbase:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v169 = result(
+	for (rangeiter(0L, 15000L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v163, oid - v163hseqbase))
+	));
+let v169hseqbase = 0L;
+let v52 = result(
+	for (rangeiter(0L, 1500L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v46, oid - v46hseqbase))
+	));
+let v52hseqbase = 0L;
+let v45 = result(
+	for (rangeiter(0L, 1500L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v39, oid - v39hseqbase))
+	));
+let v45hseqbase = 0L;
+let v45str = v39str;
+let v45stroffset = v39stroffset;
+let v38 = result(
+	for (rangeiter(0L, 1500L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v29, oid - v29hseqbase))
+	));
+let v38hseqbase = 0L;
+{v169, v52, v45, v45str, v38}
+
+
+============================================
+
+|v57:vec[u16], v57hseqbase:i64, v57str:vec[i8], v57stroffset:i64, v5:vec[i8], v62:vec[i8], v5:vec[i8], v6:vec[i8], v7:vec[i8], v8:vec[i8], v9:vec[i8], v10:vec[i8], v11:vec[i8], v38:vec[i32], v38hseqbase:i64, v52:vec[i64], v52hseqbase:i64, v45:vec[u16], v45hseqbase:i64, v45str:vec[i8], v45stroffset:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v61 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v5,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v61hseqbase = 0L;
+let v64 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v5,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v64hseqbase = 0L;
+let left = v61;
+let right = v64;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v65 = result(res);
+let v65hseqbase = 0L;
+let v67 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v6,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v67hseqbase = 0L;
+let left = v65;
+let right = v67;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v68 = result(res);
+let v68hseqbase = 0L;
+let v70 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v7,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v70hseqbase = 0L;
+let left = v68;
+let right = v70;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v71 = result(res);
+let v71hseqbase = 0L;
+let v73 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v8,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v73hseqbase = 0L;
+let left = v71;
+let right = v73;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v74 = result(res);
+let v74hseqbase = 0L;
+let v76 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v9,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v76hseqbase = 0L;
+let left = v74;
+let right = v76;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v77 = result(res);
+let v77hseqbase = 0L;
+let v79 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v10,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v79hseqbase = 0L;
+let left = v77;
+let right = v79;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v80 = result(res);
+let v80hseqbase = 0L;
+let v82 = result(
+	for (v57, appender[i64], |b, i, x|
+		if (strslice(v57str, i64(x) + v57stroffset) == v11,
+			merge(b, i + v57hseqbase),
+			b
+		)
+	));
+let v82hseqbase = 0L;
+let left = v80;
+let right = v82;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v83 = result(res);
+let v83hseqbase = 0L;
+let v84 = result(
+	for (v83, appender[?], |b, i, oid|
+		merge(b, lookup(v38, oid - v38hseqbase))
+	));
+let v84hseqbase = 0L;
+let v155 = result(
+	for(rangeiter(v84hseqbase, v84hseqbase + len(v84), 1L), appender[i64], |b, i, n|
+		merge(b, n)
+	));
+let v155hseqbase = 0L;
+let v86 = result(
+	for (v83, appender[?], |b, i, oid|
+		merge(b, lookup(v52, oid - v52hseqbase))
+	));
+let v86hseqbase = 0L;
+let v85 = result(
+	for (v83, appender[?], |b, i, oid|
+		merge(b, lookup(v45, oid - v45hseqbase))
+	));
+let v85hseqbase = 0L;
+let v85str = v45str;
+let v85stroffset = v45stroffset;
+{v84, v155, v86, v85, v85str}
+
+
+============================================
+
+|v26:vec[i64], v26hseqbase:i64, v46:vec[i64], v46hseqbase:i64, v279:i64, v107:vec[i8], v39:vec[u16], v39hseqbase:i64, v39str:vec[i8], v39stroffset:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v100 = result(
+	for (rangeiter(0L, 1500L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v46, oid - v46hseqbase))
+	));
+let v100hseqbase = 0L;
+let v106 = result(
+	for (v100, appender[i64], |b, i, x|
+		if (x > v279,
+			merge(b, i + v100hseqbase),
+			b
+		)
+	));
+let v106hseqbase = 0L;
+let v94 = result(
+	for (rangeiter(0L, 1500L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v39, oid - v39hseqbase))
+	));
+let v94hseqbase = 0L;
+let v94str = v39str;
+let v94stroffset = v39stroffset;
+{v100, v106, v94, v94str}
+
+
+============================================
+
+|v112:vec[u16], v112hseqbase:i64, v112str:vec[i8], v112stroffset:i64, v106:vec[i64], v106hseqbase:i64, v5:vec[i8], v62:vec[i8], v6:vec[i8], v7:vec[i8], v8:vec[i8], v9:vec[i8], v10:vec[i8], v11:vec[i8], v100:vec[i64], v100hseqbase:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v116 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v5,
+			merge(b, oid),
+			b
+		)
+	));
+let v116hseqbase = 0L;
+let v119 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v5,
+			merge(b, oid),
+			b
+		)
+	));
+let v119hseqbase = 0L;
+let left = v116;
+let right = v119;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v120 = result(res);
+let v120hseqbase = 0L;
+let v122 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v6,
+			merge(b, oid),
+			b
+		)
+	));
+let v122hseqbase = 0L;
+let left = v120;
+let right = v122;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v123 = result(res);
+let v123hseqbase = 0L;
+let v125 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v7,
+			merge(b, oid),
+			b
+		)
+	));
+let v125hseqbase = 0L;
+let left = v123;
+let right = v125;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v126 = result(res);
+let v126hseqbase = 0L;
+let v128 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v8,
+			merge(b, oid),
+			b
+		)
+	));
+let v128hseqbase = 0L;
+let left = v126;
+let right = v128;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v129 = result(res);
+let v129hseqbase = 0L;
+let v131 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v9,
+			merge(b, oid),
+			b
+		)
+	));
+let v131hseqbase = 0L;
+let left = v129;
+let right = v131;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v132 = result(res);
+let v132hseqbase = 0L;
+let v134 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v10,
+			merge(b, oid),
+			b
+		)
+	));
+let v134hseqbase = 0L;
+let left = v132;
+let right = v134;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v135 = result(res);
+let v135hseqbase = 0L;
+let v137 = result(
+	for (v106, appender[i64], |b, i, oid|
+		let offset = lookup(v112, oid - v112hseqbase);
+
+		if (strslice(v112str, i64(offset) + v112stroffset) == v11,
+			merge(b, oid),
+			b
+		)
+	));
+let v137hseqbase = 0L;
+let left = v135;
+let right = v137;
+let iter_res = if(len(left) > 0L && len(right) > 0L,
+	iterate({0L, 0L, appender[i64]}, |x|
+		let leftIdx = x.$0;
+
+		let rightIdx = x.$1;
+
+		let b = x.$2;
+
+		let leftVal = lookup(left, leftIdx);
+
+		let rightVal = lookup(right, rightIdx);
+
+		let output = 
+		if(leftVal < rightVal,
+			{leftIdx + 1L, rightIdx, merge(b, leftVal)},
+			if (leftVal > rightVal,
+				{leftIdx, rightIdx + 1L, merge(b, rightVal)},
+				{leftIdx + 1L, rightIdx + 1L, merge(b, leftVal)}
+			)
+		);
+
+		{output, output.$0 < len(left) && output.$1 < len(right)}),
+	{0L, 0L, appender[i64]});
+let res = iter_res.$2;
+let res = for(rangeiter(iter_res.$0, len(left), 1L), res, |b, i, x| merge(b, lookup(left, x)));
+let res = for(rangeiter(iter_res.$1, len(right), 1L), res, |b, i, x| merge(b, lookup(right, x)));
+let v138 = result(res);
+let v138hseqbase = 0L;
+let v140 = result(
+	for (v138, appender[?], |b, i, oid|
+		merge(b, lookup(v100, oid - v100hseqbase))
+	));
+let v140hseqbase = 0L;
+{v140}
+
+
+============================================
+
+|v155:vec[i64], v155hseqbase:i64, v148:vec[i64], v148hseqbase:i64, v150:i32, v157:i8, v154:i64, v84:vec[i32], v84hseqbase:i64, v169:vec[i32], v169hseqbase:i64, v86:vec[i64], v86hseqbase:i64, v85:vec[u16], v85hseqbase:i64, v85str:vec[i8], v85stroffset:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let interResult = cudf[weldIntersectNoCandListi64, {vec[i64], i32}](v155, v148, v157, v154);
+let v156 = interResult.$0;
+let v156bat = interResult.$1;
+let v156hseqbase = 0L;
+let v158 = result(
+	for (v156, appender[?], |b, i, oid|
+		merge(b, lookup(v84, oid - v84hseqbase))
+	));
+let v158hseqbase = 0L;
+let v172 = result(
+	for(rangeiter(v158hseqbase, v158hseqbase + len(v158), 1L), appender[i64], |b, i, n|
+		merge(b, n)
+	));
+let v172hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi32, {vec[i64], vec[i64], i32, i32}](v158, v169, v157, v154);
+let v170 = joinResult.$0;
+let v170bat = joinResult.$2;
+let v170hseqbase = 0L;
+let v171 = joinResult.$1;
+let v171bat = joinResult.$3;
+let v171hseqbase = 0L;
+let diffResult = cudf[weldDifferenceNoCandListi64, {vec[i64], i32}](v172, v170, v157, v154);
+let v173 = diffResult.$0;
+let v173bat = diffResult.$1;
+let v173hseqbase = 0L;
+let v160 = result(
+	for (v156, appender[?], |b, i, oid|
+		merge(b, lookup(v86, oid - v86hseqbase))
+	));
+let v160hseqbase = 0L;
+let v176 = result(
+	for (v173, appender[?], |b, i, oid|
+		merge(b, lookup(v160, oid - v160hseqbase))
+	));
+let v176hseqbase = 0L;
+let v159 = result(
+	for (v156, appender[?], |b, i, oid|
+		merge(b, lookup(v85, oid - v85hseqbase))
+	));
+let v159hseqbase = 0L;
+let v159str = v85str;
+let v159stroffset = v85stroffset;
+let v175 = result(
+	for (v173, appender[?], |b, i, oid|
+		merge(b, lookup(v159, oid - v159hseqbase))
+	));
+let v175hseqbase = 0L;
+let v175str = v159str;
+let v175stroffset = v159stroffset;
+{v176, v175, v175str}
+
+
+============================================
+
+|v181:vec[u8], v181hseqbase:i64, v181str:vec[i8], v181stroffset:i64, v176:vec[i64], v176hseqbase:i64, v153:i8, v153:i8, v157:i8,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let groupHash = result(
+	for(zip(v181), dictmerger[ i64, i64, min], |b, i, n|
+		merge(b, { i64(n), i})
+	));
+let groupHashVec = tovec(groupHash);
+let groupIdsDict = result(
+	for(groupHashVec, dictmerger[ i64, i64, min], |b, i, n|
+		merge(b, {n.$0, i})
+	));
+let empty = result(
+	for(rangeiter(0L, len(groupHashVec), 1L), appender[i64], |b, i, n|
+		merge(b, 0L)
+	));
+let ids = for(zip(v181), appender[i64], |b, i, n|
+	let groupId = lookup(groupIdsDict,  i64(n));
+
+	merge(b, groupId));
+let counts = for(zip(v181), vecmerger[i64, +](empty), |b, i, n|
+	let groupId = lookup(groupIdsDict,  i64(n));
+
+	merge(b, {groupId, 1L}));
+let v184 = result(ids);
+let v184hseqbase = 0L;
+let v186 = result(counts);
+let v186hseqbase = 0L;
+let v185 = result(
+	for(groupHashVec, vecmerger[i64, +](empty), |b, i, n|
+		merge(b, {i, lookup(groupHash, n.$0)})
+	));
+let v185hseqbase = 0L;
+let empty = result(
+	for(rangeiter(0L, len(v185), 1L), appender[i64], |b, i, x|
+		merge(b, i64(0c))
+	));
+let v189 = result(
+	for(zip(v184, v176), vecmerger[i64, +](empty), |b, i, x|
+		merge(b, {x.$0, (x.$1)})
+	));
+let v189hseqbase = 0L;
+let empty = result(
+	for(rangeiter(0L, len(v185), 1L), appender[i64], |b, i, x|
+		merge(b, 0L)
+	));
+let v188 = result(
+	for(v184, vecmerger[i64, +](empty), |b, i, x|
+		merge(b, {x, 1L})
+	));
+let v188hseqbase = 0L;
+let v187 = result(
+	for (v185, appender[?], |b, i, oid|
+		merge(b, lookup(v181, oid - v181hseqbase))
+	));
+let v187hseqbase = 0L;
+let v187str = v181str;
+let v187stroffset = v181stroffset;
+{v189, v188, v187, v187str}
+
+
+============================================
+
+|v193:vec[i64], v193hseqbase:i64, v189:vec[i64], v189hseqbase:i64, v188:vec[i64], v188hseqbase:i64, v187:vec[u8], v187hseqbase:i64, v187str:vec[i8], v187stroffset:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v199 = result(
+	for (v193, appender[?], |b, i, oid|
+		merge(b, lookup(v189, oid - v189hseqbase))
+	));
+let v199hseqbase = 0L;
+let v198 = result(
+	for (v193, appender[?], |b, i, oid|
+		merge(b, lookup(v188, oid - v188hseqbase))
+	));
+let v198hseqbase = 0L;
+let v197 = result(
+	for (v193, appender[?], |b, i, oid|
+		merge(b, lookup(v187, oid - v187hseqbase))
+	));
+let v197hseqbase = 0L;
+let v197str = v187str;
+let v197stroffset = v187stroffset;
+{v199, v198, v197, v197str}
+
+
+============================================
+

@@ -1,0 +1,118 @@
++-------------------------------------------------------------------------------------------------------------------------------------+
+| mal                                                                                                                                 |
++=====================================================================================================================================+
+| function user.s2_1():void;                                                                                                          |
+|     X_41:void := querylog.define("explain\nselect\n sum(l_extendedprice* (1 - l_discount)) as revenue\nfrom\n lineitem,\n part\nwhe |
+: re\n (\n p_partkey = l_partkey\n and p_brand = \\'Brand#12\\'\n and p_container in (\\'SM CASE\\', \\'SM BOX\\', \\'SM PACK\\', \\' :
+: SM PKG\\')\n and l_quantity >= 1 and l_quantity <= 1 + 10\n and p_size between 1 and 5\n and l_shipmode in (\\'AIR\\', \\'AIR REG\\ :
+: ')\n and l_shipinstruct = \\'DELIVER IN PERSON\\'\n )\n or\n (\n p_partkey = l_partkey\n and p_brand = \\'Brand#23\\'\n and p_conta :
+: iner in (\\'MED BAG\\', \\'MED BOX\\', \\'MED PKG\\', \\'MED PACK\\')\n and l_quantity >= 10 and l_quantity <= 10 + 10\n and p_size :
+:  between 1 and 10\n and l_shipmode in (\\'AIR\\', \\'AIR REG\\')\n and l_shipinstruct = \\'DELIVER IN PERSON\\'\n )\n or\n (\n p_pa :
+: rtkey = l_partkey\n and p_brand = \\'Brand#34\\'\n and p_container in (\\'LG CASE\\', \\'LG BOX\\', \\'LG PACK\\', \\'LG PKG\\')\n  :
+: and l_quantity >= 20 and l_quantity <= 20 + 10\n and p_size between 1 and 15\n and l_shipmode in (\\'AIR\\', \\'AIR REG\\')\n and l :
+: _shipinstruct = \\'DELIVER IN PERSON\\'\n );":str, "default_pipe":str, 359:int);                                                    :
+|     X_44:int := sql.mvc();                                                                                                          |
+|     C_45:bat[:oid] := sql.tid(X_44:int, "sys":str, "part":str);                                                                     |
+|     X_48:bat[:int] := sql.bind(X_44:int, "sys":str, "part":str, "p_partkey":str, 0:int);                                            |
+|     X_57:bat[:int] := algebra.projection(C_45:bat[:oid], X_48:bat[:int]);                                                           |
+|     C_114:bat[:oid] := sql.tid(X_44:int, "sys":str, "lineitem":str);                                                                |
+|     X_123:bat[:int] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_partkey":str, 0:int);                                       |
+|     X_129:bat[:int] := algebra.projection(C_114:bat[:oid], X_123:bat[:int]);                                                        |
+|     (X_249:bat[:oid], X_250:bat[:oid]) := algebra.join(X_57:bat[:int], X_129:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng);      |
+|     X_93:bat[:str] := sql.bind(X_44:int, "sys":str, "part":str, "p_container":str, 0:int);                                          |
+|     X_261:bat[:str] := algebra.projectionpath(X_249:bat[:oid], C_45:bat[:oid], X_93:bat[:str]);                                     |
+|     X_214:bat[:str] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_shipmode":str, 0:int);                                      |
+|     X_279:bat[:str] := algebra.projectionpath(X_250:bat[:oid], C_114:bat[:oid], X_214:bat[:str]);                                   |
+|     X_144:bat[:lng] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_quantity":str, 0:int);                                      |
+|     X_269:bat[:lng] := algebra.projectionpath(X_250:bat[:oid], C_114:bat[:oid], X_144:bat[:lng]);                                   |
+|     X_86:bat[:int] := sql.bind(X_44:int, "sys":str, "part":str, "p_size":str, 0:int);                                               |
+|     X_260:bat[:int] := algebra.projectionpath(X_249:bat[:oid], C_45:bat[:oid], X_86:bat[:int]);                                     |
+|     X_207:bat[:str] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_shipinstruct":str, 0:int);                                  |
+|     X_278:bat[:str] := algebra.projectionpath(X_250:bat[:oid], C_114:bat[:oid], X_207:bat[:str]);                                   |
+|     X_72:bat[:str] := sql.bind(X_44:int, "sys":str, "part":str, "p_brand":str, 0:int);                                              |
+|     X_258:bat[:str] := algebra.projectionpath(X_249:bat[:oid], C_45:bat[:oid], X_72:bat[:str]);                                     |
+|     C_292:bat[:oid] := algebra.thetaselect(X_258:bat[:str], "Brand#12":str, "==":str);                                              |
+|     C_298:bat[:oid] := algebra.thetaselect(X_278:bat[:str], C_292:bat[:oid], "DELIVER IN PERSON":str, "==":str);                    |
+|     C_303:bat[:oid] := algebra.select(X_260:bat[:int], C_298:bat[:oid], 1:int, 5:int, true:bit, true:bit, false:bit);               |
+|     C_315:bat[:oid] := algebra.select(X_269:bat[:lng], C_303:bat[:oid], 100:lng, 1100:lng, true:bit, true:bit, false:bit);          |
+|     C_318:bat[:oid] := algebra.thetaselect(X_279:bat[:str], C_315:bat[:oid], "AIR":str, "==":str);                                  |
+|     C_328:bat[:oid] := bat.mergecand(C_318:bat[:oid], C_318:bat[:oid]);                                                             |
+|     C_332:bat[:oid] := algebra.thetaselect(X_279:bat[:str], C_315:bat[:oid], "AIR REG":str, "==":str);                              |
+|     C_333:bat[:oid] := bat.mergecand(C_328:bat[:oid], C_332:bat[:oid]);                                                             |
+|     C_336:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_333:bat[:oid], "SM CASE":str, "==":str);                              |
+|     C_340:bat[:oid] := bat.mergecand(C_336:bat[:oid], C_336:bat[:oid]);                                                             |
+|     C_344:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_333:bat[:oid], "SM BOX":str, "==":str);                               |
+|     C_345:bat[:oid] := bat.mergecand(C_340:bat[:oid], C_344:bat[:oid]);                                                             |
+|     C_348:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_333:bat[:oid], "SM PACK":str, "==":str);                              |
+|     C_349:bat[:oid] := bat.mergecand(C_345:bat[:oid], C_348:bat[:oid]);                                                             |
+|     C_352:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_333:bat[:oid], "SM PKG":str, "==":str);                               |
+|     C_353:bat[:oid] := bat.mergecand(C_349:bat[:oid], C_352:bat[:oid]);                                                             |
+|     C_361:bat[:oid] := algebra.thetaselect(X_258:bat[:str], "Brand#23":str, "==":str);                                              |
+|     C_367:bat[:oid] := algebra.thetaselect(X_278:bat[:str], C_361:bat[:oid], "DELIVER IN PERSON":str, "==":str);                    |
+|     C_372:bat[:oid] := algebra.select(X_260:bat[:int], C_367:bat[:oid], 1:int, 10:int, true:bit, true:bit, false:bit);              |
+|     C_384:bat[:oid] := algebra.select(X_269:bat[:lng], C_372:bat[:oid], 1000:lng, 2000:lng, true:bit, true:bit, false:bit);         |
+|     C_387:bat[:oid] := algebra.thetaselect(X_279:bat[:str], C_384:bat[:oid], "AIR":str, "==":str);                                  |
+|     C_397:bat[:oid] := bat.mergecand(C_387:bat[:oid], C_387:bat[:oid]);                                                             |
+|     C_401:bat[:oid] := algebra.thetaselect(X_279:bat[:str], C_384:bat[:oid], "AIR REG":str, "==":str);                              |
+|     C_402:bat[:oid] := bat.mergecand(C_397:bat[:oid], C_401:bat[:oid]);                                                             |
+|     C_405:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_402:bat[:oid], "MED BAG":str, "==":str);                              |
+|     C_409:bat[:oid] := bat.mergecand(C_405:bat[:oid], C_405:bat[:oid]);                                                             |
+|     C_412:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_402:bat[:oid], "MED BOX":str, "==":str);                              |
+|     C_413:bat[:oid] := bat.mergecand(C_409:bat[:oid], C_412:bat[:oid]);                                                             |
+|     C_416:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_402:bat[:oid], "MED PKG":str, "==":str);                              |
+|     C_417:bat[:oid] := bat.mergecand(C_413:bat[:oid], C_416:bat[:oid]);                                                             |
+|     C_421:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_402:bat[:oid], "MED PACK":str, "==":str);                             |
+|     C_422:bat[:oid] := bat.mergecand(C_417:bat[:oid], C_421:bat[:oid]);                                                             |
+|     C_423:bat[:oid] := bat.mergecand(C_353:bat[:oid], C_422:bat[:oid]);                                                             |
+|     C_430:bat[:oid] := algebra.thetaselect(X_258:bat[:str], "Brand#34":str, "==":str);                                              |
+|     C_436:bat[:oid] := algebra.thetaselect(X_278:bat[:str], C_430:bat[:oid], "DELIVER IN PERSON":str, "==":str);                    |
+|     C_441:bat[:oid] := algebra.select(X_260:bat[:int], C_436:bat[:oid], 1:int, 15:int, true:bit, true:bit, false:bit);              |
+|     C_453:bat[:oid] := algebra.select(X_269:bat[:lng], C_441:bat[:oid], 2000:lng, 3000:lng, true:bit, true:bit, false:bit);         |
+|     C_456:bat[:oid] := algebra.thetaselect(X_279:bat[:str], C_453:bat[:oid], "AIR":str, "==":str);                                  |
+|     C_466:bat[:oid] := bat.mergecand(C_456:bat[:oid], C_456:bat[:oid]);                                                             |
+|     C_470:bat[:oid] := algebra.thetaselect(X_279:bat[:str], C_453:bat[:oid], "AIR REG":str, "==":str);                              |
+|     C_471:bat[:oid] := bat.mergecand(C_466:bat[:oid], C_470:bat[:oid]);                                                             |
+|     C_474:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_471:bat[:oid], "LG CASE":str, "==":str);                              |
+|     C_478:bat[:oid] := bat.mergecand(C_474:bat[:oid], C_474:bat[:oid]);                                                             |
+|     C_482:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_471:bat[:oid], "LG BOX":str, "==":str);                               |
+|     C_483:bat[:oid] := bat.mergecand(C_478:bat[:oid], C_482:bat[:oid]);                                                             |
+|     C_486:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_471:bat[:oid], "LG PACK":str, "==":str);                              |
+|     C_487:bat[:oid] := bat.mergecand(C_483:bat[:oid], C_486:bat[:oid]);                                                             |
+|     C_490:bat[:oid] := algebra.thetaselect(X_261:bat[:str], C_471:bat[:oid], "LG PKG":str, "==":str);                               |
+|     C_491:bat[:oid] := bat.mergecand(C_487:bat[:oid], C_490:bat[:oid]);                                                             |
+|     C_492:bat[:oid] := bat.mergecand(C_423:bat[:oid], C_491:bat[:oid]);                                                             |
+|     X_151:bat[:lng] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_extendedprice":str, 0:int);                                 |
+|     X_508:bat[:lng] := algebra.projectionpath(C_492:bat[:oid], X_250:bat[:oid], C_114:bat[:oid], X_151:bat[:lng]);                  |
+|     X_158:bat[:lng] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_discount":str, 0:int);                                      |
+|     X_509:bat[:lng] := algebra.projectionpath(C_492:bat[:oid], X_250:bat[:oid], C_114:bat[:oid], X_158:bat[:lng]);                  |
+|     X_527:bat[:lng] := batcalc.-(100:lng, X_509:bat[:lng]);                                                                         |
+|     X_530:bat[:lng] := batcalc.*(X_508:bat[:lng], X_527:bat[:lng]);                                                                 |
+|     X_532:lng := aggr.sum(X_530:bat[:lng]);                                                                                         |
+|     sql.resultSet("sys.L22":str, "revenue":str, "decimal":str, 18:int, 4:int, 10:int, X_532:lng);                                   |
+| end user.s2_1;                                                                                                                      |
+| #inline               actions= 0 time=5 usec                                                                                        |
+| #remap                actions= 2 time=79 usec                                                                                       |
+| #costmodel            actions= 1 time=6 usec                                                                                        |
+| #coercion             actions= 0 time=7 usec                                                                                        |
+| #evaluate             actions=92 time=222 usec                                                                                      |
+| #emptybind            actions=25 time=42 usec                                                                                       |
+| #pushselect           actions= 0 time=15 usec                                                                                       |
+| #aliases              actions=117 time=40 usec                                                                                      |
+| #mergetable           actions= 0 time=148 usec                                                                                      |
+| #deadcode             actions=145 time=47 usec                                                                                      |
+| #aliases              actions= 0 time=1 usec                                                                                        |
+| #constants            actions=127 time=113 usec                                                                                     |
+| #commonTerms          actions= 6 time=31 usec                                                                                       |
+| #projectionpath       actions=10 time=22 usec                                                                                       |
+| #deadcode             actions=16 time=18 usec                                                                                       |
+| #reorder              actions= 1 time=50 usec                                                                                       |
+| #matpack              actions= 0 time=0 usec                                                                                        |
+| #multiplex            actions= 0 time=3 usec                                                                                        |
+| #profiler             actions=1 time=2 usec                                                                                         |
+| #candidates           actions=1 time=1 usec                                                                                         |
+| #deadcode             actions= 0 time=15 usec                                                                                       |
+| #wlc                  actions= 0 time=1 usec                                                                                        |
+| #garbagecollector     actions= 1 time=178 usec                                                                                      |
+| #total                actions=28 time=1288 usec                                                                                     |
++-------------------------------------------------------------------------------------------------------------------------------------+
+105 tuples

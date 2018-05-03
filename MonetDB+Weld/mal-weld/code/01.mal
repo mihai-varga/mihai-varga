@@ -1,0 +1,141 @@
++-------------------------------------------------------------------------------------------------------------------------------------+
+| mal                                                                                                                                 |
++=====================================================================================================================================+
+| function user.main():void;                                                                                                          |
+|     X_12:void := querylog.define("explain\nselect\n l_returnflag,\n l_linestatus,\n sum(l_quantity) as sum_qty,\n sum(l_extendedpri |
+: ce) as sum_base_price,\n sum(l_extendedprice * (1 - l_discount)) as sum_disc_price,\n sum(l_extendedprice * (1 - l_discount) * (1 + :
+:  l_tax)) as sum_charge,\n sum(l_quantity * 2) as avg_qty,\n sum(l_extendedprice - 1) as avg_price,\n sum(l_discount) as avg_disc,\n :
+:  count(*) as count_order\nfrom\n lineitem\nwhere\n l_shipdate <= date '1998-12-01' - interval '90' day (3)\ngroup by\n l_returnflag :
+: ,\n l_linestatus\norder by\n l_returnflag,\n l_linestatus;":str, "default_pipe":str, 154:int);                                      :
+|     X_142:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_148:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_146:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_145:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_144:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_15:int := sql.mvc();                                                                                                          |
+|     X_64:bat[:date] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_shipdate":str, 0:int);                                      |
+|     C_16:bat[:oid] := sql.tid(X_15:int, "sys":str, "lineitem":str);                                                                 |
+|     C_74:bat[:oid] := algebra.thetaselect(X_64:bat[:date], C_16:bat[:oid], "1998-09-02":date, "<=":str);                            |
+|     X_57:bat[:str] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_linestatus":str, 0:int);                                     |
+|     X_81:bat[:str] := algebra.projection(C_74:bat[:oid], X_57:bat[:str]);                                                           |
+|     X_50:bat[:str] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_returnflag":str, 0:int);                                     |
+|     X_80:bat[:str] := algebra.projection(C_74:bat[:oid], X_50:bat[:str]);                                                           |
+|     (X_106:bat[:oid], C_107:bat[:oid], X_108:bat[:lng]) := group.group(X_80:bat[:str]);                                             |
+|     (X_109:bat[:oid], C_110:bat[:oid], X_111:bat[:lng]) := group.subgroupdone(X_81:bat[:str], X_106:bat[:oid]);                     |
+|     X_112:bat[:str] := algebra.projection(C_110:bat[:oid], X_80:bat[:str]);                                                         |
+|     X_113:bat[:str] := algebra.projection(C_110:bat[:oid], X_81:bat[:str]);                                                         |
+|     X_19:bat[:lng] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_quantity":str, 0:int);                                       |
+|     X_76:bat[:lng] := algebra.projection(C_74:bat[:oid], X_19:bat[:lng]);                                                           |
+|     X_114:bat[:lng] := aggr.subsum(X_76:bat[:lng], X_109:bat[:oid], C_110:bat[:oid], true:bit, true:bit);                           |
+|     X_29:bat[:lng] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_extendedprice":str, 0:int);                                  |
+|     X_77:bat[:lng] := algebra.projection(C_74:bat[:oid], X_29:bat[:lng]);                                                           |
+|     X_117:bat[:lng] := aggr.subsum(X_77:bat[:lng], X_109:bat[:oid], C_110:bat[:oid], true:bit, true:bit);                           |
+|     X_36:bat[:lng] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_discount":str, 0:int);                                       |
+|     X_78:bat[:lng] := algebra.projection(C_74:bat[:oid], X_36:bat[:lng]);                                                           |
+|     X_87:bat[:lng] := batcalc.-(100:lng, X_78:bat[:lng]);                                                                           |
+|     X_90:bat[:lng] := batcalc.*(X_77:bat[:lng], X_87:bat[:lng]);                                                                    |
+|     X_118:bat[:lng] := aggr.subsum(X_90:bat[:lng], X_109:bat[:oid], C_110:bat[:oid], true:bit, true:bit);                           |
+|     X_43:bat[:lng] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_tax":str, 0:int);                                            |
+|     X_79:bat[:lng] := algebra.projection(C_74:bat[:oid], X_43:bat[:lng]);                                                           |
+|     X_98:bat[:lng] := batcalc.+(X_79:bat[:lng], 100:lng);                                                                           |
+|     X_100:bat[:lng] := batcalc.*(X_90:bat[:lng], X_98:bat[:lng]);                                                                   |
+|     X_119:bat[:lng] := aggr.subsum(X_100:bat[:lng], X_109:bat[:oid], C_110:bat[:oid], true:bit, true:bit);                          |
+|     X_102:bat[:lng] := batcalc.*(X_76:bat[:lng], 2:bte);                                                                            |
+|     X_120:bat[:lng] := aggr.subsum(X_102:bat[:lng], X_109:bat[:oid], C_110:bat[:oid], true:bit, true:bit);                          |
+|     X_105:bat[:lng] := batcalc.-(X_77:bat[:lng], 100:lng);                                                                          |
+|     X_121:bat[:lng] := aggr.subsum(X_105:bat[:lng], X_109:bat[:oid], C_110:bat[:oid], true:bit, true:bit);                          |
+|     X_122:bat[:lng] := aggr.subsum(X_78:bat[:lng], X_109:bat[:oid], C_110:bat[:oid], true:bit, true:bit);                           |
+|     X_123:bat[:lng] := aggr.subcount(X_109:bat[:oid], X_109:bat[:oid], C_110:bat[:oid], false:bit);                                 |
+|     (X_125:bat[:str], X_126:bat[:oid], X_127:bat[:oid]) := algebra.sort(X_112:bat[:str], false:bit, false:bit);                     |
+|     (X_128:bat[:str], X_129:bat[:oid], X_130:bat[:oid]) := algebra.sort(X_113:bat[:str], X_126:bat[:oid], X_127:bat[:oid], false:bi |
+: t, false:bit);                                                                                                                      :
+|     X_140:bat[:lng] := algebra.projection(X_129:bat[:oid], X_123:bat[:lng]);                                                        |
+|     X_139:bat[:lng] := algebra.projection(X_129:bat[:oid], X_122:bat[:lng]);                                                        |
+|     X_138:bat[:lng] := algebra.projection(X_129:bat[:oid], X_121:bat[:lng]);                                                        |
+|     X_137:bat[:lng] := algebra.projection(X_129:bat[:oid], X_120:bat[:lng]);                                                        |
+|     X_136:bat[:lng] := algebra.projection(X_129:bat[:oid], X_119:bat[:lng]);                                                        |
+|     X_135:bat[:lng] := algebra.projection(X_129:bat[:oid], X_118:bat[:lng]);                                                        |
+|     X_134:bat[:lng] := algebra.projection(X_129:bat[:oid], X_117:bat[:lng]);                                                        |
+|     X_133:bat[:lng] := algebra.projection(X_129:bat[:oid], X_114:bat[:lng]);                                                        |
+|     X_132:bat[:str] := algebra.projection(X_129:bat[:oid], X_113:bat[:str]);                                                        |
+|     X_131:bat[:str] := algebra.projection(X_129:bat[:oid], X_112:bat[:str]);                                                        |
+|     X_149:bat[:str] := bat.append(X_142:bat[:str], "sys.lineitem":str);                                                             |
+|     X_151:bat[:str] := bat.append(X_144:bat[:str], "l_returnflag":str);                                                             |
+|     X_153:bat[:str] := bat.append(X_145:bat[:str], "char":str);                                                                     |
+|     X_155:bat[:int] := bat.append(X_146:bat[:int], 1:int);                                                                          |
+|     X_157:bat[:int] := bat.append(X_148:bat[:int], 0:int);                                                                          |
+|     X_159:bat[:str] := bat.append(X_149:bat[:str], "sys.lineitem":str);                                                             |
+|     X_160:bat[:str] := bat.append(X_151:bat[:str], "l_linestatus":str);                                                             |
+|     X_162:bat[:str] := bat.append(X_153:bat[:str], "char":str);                                                                     |
+|     X_163:bat[:int] := bat.append(X_155:bat[:int], 1:int);                                                                          |
+|     X_164:bat[:int] := bat.append(X_157:bat[:int], 0:int);                                                                          |
+|     X_165:bat[:str] := bat.append(X_159:bat[:str], "sys.L5":str);                                                                   |
+|     X_167:bat[:str] := bat.append(X_160:bat[:str], "sum_qty":str);                                                                  |
+|     X_169:bat[:str] := bat.append(X_162:bat[:str], "decimal":str);                                                                  |
+|     X_171:bat[:int] := bat.append(X_163:bat[:int], 18:int);                                                                         |
+|     X_173:bat[:int] := bat.append(X_164:bat[:int], 2:int);                                                                          |
+|     X_175:bat[:str] := bat.append(X_165:bat[:str], "sys.L10":str);                                                                  |
+|     X_177:bat[:str] := bat.append(X_167:bat[:str], "sum_base_price":str);                                                           |
+|     X_179:bat[:str] := bat.append(X_169:bat[:str], "decimal":str);                                                                  |
+|     X_180:bat[:int] := bat.append(X_171:bat[:int], 18:int);                                                                         |
+|     X_181:bat[:int] := bat.append(X_173:bat[:int], 2:int);                                                                          |
+|     X_182:bat[:str] := bat.append(X_175:bat[:str], "sys.L13":str);                                                                  |
+|     X_184:bat[:str] := bat.append(X_177:bat[:str], "sum_disc_price":str);                                                           |
+|     X_186:bat[:str] := bat.append(X_179:bat[:str], "decimal":str);                                                                  |
+|     X_187:bat[:int] := bat.append(X_180:bat[:int], 18:int);                                                                         |
+|     X_188:bat[:int] := bat.append(X_181:bat[:int], 4:int);                                                                          |
+|     X_190:bat[:str] := bat.append(X_182:bat[:str], "sys.L16":str);                                                                  |
+|     X_192:bat[:str] := bat.append(X_184:bat[:str], "sum_charge":str);                                                               |
+|     X_194:bat[:str] := bat.append(X_186:bat[:str], "decimal":str);                                                                  |
+|     X_195:bat[:int] := bat.append(X_187:bat[:int], 18:int);                                                                         |
+|     X_196:bat[:int] := bat.append(X_188:bat[:int], 6:int);                                                                          |
+|     X_198:bat[:str] := bat.append(X_190:bat[:str], "sys.L21":str);                                                                  |
+|     X_200:bat[:str] := bat.append(X_192:bat[:str], "avg_qty":str);                                                                  |
+|     X_202:bat[:str] := bat.append(X_194:bat[:str], "decimal":str);                                                                  |
+|     X_204:bat[:int] := bat.append(X_195:bat[:int], 18:int);                                                                         |
+|     X_206:bat[:int] := bat.append(X_196:bat[:int], 2:int);                                                                          |
+|     X_208:bat[:str] := bat.append(X_198:bat[:str], "sys.L24":str);                                                                  |
+|     X_210:bat[:str] := bat.append(X_200:bat[:str], "avg_price":str);                                                                |
+|     X_212:bat[:str] := bat.append(X_202:bat[:str], "decimal":str);                                                                  |
+|     X_213:bat[:int] := bat.append(X_204:bat[:int], 18:int);                                                                         |
+|     X_214:bat[:int] := bat.append(X_206:bat[:int], 2:int);                                                                          |
+|     X_215:bat[:str] := bat.append(X_208:bat[:str], "sys.L27":str);                                                                  |
+|     X_217:bat[:str] := bat.append(X_210:bat[:str], "avg_disc":str);                                                                 |
+|     X_219:bat[:str] := bat.append(X_212:bat[:str], "decimal":str);                                                                  |
+|     X_220:bat[:int] := bat.append(X_213:bat[:int], 18:int);                                                                         |
+|     X_221:bat[:int] := bat.append(X_214:bat[:int], 2:int);                                                                          |
+|     X_222:bat[:str] := bat.append(X_215:bat[:str], "sys.L32":str);                                                                  |
+|     X_224:bat[:str] := bat.append(X_217:bat[:str], "count_order":str);                                                              |
+|     X_226:bat[:str] := bat.append(X_219:bat[:str], "bigint":str);                                                                   |
+|     X_228:bat[:int] := bat.append(X_220:bat[:int], 64:int);                                                                         |
+|     X_230:bat[:int] := bat.append(X_221:bat[:int], 0:int);                                                                          |
+|     sql.resultSet(X_222:bat[:str], X_224:bat[:str], X_226:bat[:str], X_228:bat[:int], X_230:bat[:int], X_131:bat[:str], X_132:bat[: |
+: str], X_133:bat[:lng], X_134:bat[:lng], X_135:bat[:lng], X_136:bat[:lng], X_137:bat[:lng], X_138:bat[:lng], X_139:bat[:lng], X_140: :
+: bat[:lng]);                                                                                                                         :
+| end user.main;                                                                                                                      |
+| #inline               actions= 0 time=10 usec                                                                                       |
+| #remap                actions= 8 time=325 usec                                                                                      |
+| #costmodel            actions= 1 time=8 usec                                                                                        |
+| #coercion             actions= 0 time=8 usec                                                                                        |
+| #evaluate             actions=19 time=113 usec                                                                                      |
+| #emptybind            actions= 7 time=40 usec                                                                                       |
+| #pushselect           actions= 8 time=39 usec                                                                                       |
+| #aliases              actions=33 time=37 usec                                                                                       |
+| #mergetable           actions= 0 time=276 usec                                                                                      |
+| #deadcode             actions=15 time=43 usec                                                                                       |
+| #aliases              actions= 0 time=1 usec                                                                                        |
+| #constants            actions=18 time=62 usec                                                                                       |
+| #commonTerms          actions= 2 time=39 usec                                                                                       |
+| #projectionpath       actions= 0 time=28 usec                                                                                       |
+| #deadcode             actions= 2 time=33 usec                                                                                       |
+| #reorder              actions= 1 time=118 usec                                                                                      |
+| #matpack              actions= 0 time=1 usec                                                                                        |
+| #multiplex            actions= 0 time=6 usec                                                                                        |
+| #profiler             actions=1 time=4 usec                                                                                         |
+| #candidates           actions=1 time=4 usec                                                                                         |
+| #deadcode             actions= 0 time=30 usec                                                                                       |
+| #wlc                  actions= 0 time=0 usec                                                                                        |
+| #garbagecollector     actions= 1 time=347 usec                                                                                      |
+| #total                actions=28 time=2026 usec                                                                                     |
++-------------------------------------------------------------------------------------------------------------------------------------+
+129 tuples

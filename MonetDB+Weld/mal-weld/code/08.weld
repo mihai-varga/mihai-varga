@@ -1,0 +1,412 @@
+|v15:vec[i32], v15hseqbase:i64, v12:vec[i64], v12hseqbase:i64, v5:i32, v6:i32, v35:i8, v35:i8, v37:i8, v25:vec[i64], v25hseqbase:i64, v28:vec[i64], v28hseqbase:i64, v29:vec[i64], v29hseqbase:i64, v27:vec[i64], v27hseqbase:i64, v41:vec[i64], v41hseqbase:i64, v52:i32, v52:i32, v54:i64, v60:vec[i64], v60hseqbase:i64, v90:vec[i64], v90hseqbase:i64, v93:vec[i64], v93hseqbase:i64, v94:vec[i64], v94hseqbase:i64, v92:vec[i64], v92hseqbase:i64, v52:i32, v52:i32, v37:i8, v54:i64, v62:vec[i32], v62hseqbase:i64, v122:vec[u16], v122hseqbase:i64, v122str:vec[i8], v122stroffset:i64, v113:vec[i64], v113hseqbase:i64, v7:vec[i8], v137:vec[i8], v115:vec[i32], v115hseqbase:i64, v52:i32, v52:i32, v37:i8, v54:i64, v69:vec[i32], v69hseqbase:i64, v158:vec[i64], v158hseqbase:i64, v160:vec[i32], v160hseqbase:i64, v52:i32, v52:i32, v37:i8, v54:i64, v43:vec[i64], v43hseqbase:i64, v46:vec[i64], v46hseqbase:i64, v47:vec[i64], v47hseqbase:i64, v45:vec[i64], v45hseqbase:i64, v194:vec[i64], v194hseqbase:i64, v196:vec[i64], v196hseqbase:i64, v199:vec[i64], v199hseqbase:i64, v200:vec[i64], v200hseqbase:i64, v198:vec[i64], v198hseqbase:i64, v223:vec[u8], v223hseqbase:i64, v223str:vec[i8], v223stroffset:i64, v221:vec[i64], v221hseqbase:i64, v4:vec[i8], v137:vec[i8], v52:i32, v52:i32, v37:i8, v54:i64, v167:vec[i64], v167hseqbase:i64, v170:vec[i64], v170hseqbase:i64, v171:vec[i64], v171hseqbase:i64, v169:vec[i64], v169hseqbase:i64, v194:vec[i64], v194hseqbase:i64, v76:vec[i64], v76hseqbase:i64, v83:vec[i64], v83hseqbase:i64, v412:i64, v35:i8, v267:vec[u16], v267hseqbase:i64, v267str:vec[i8], v267stroffset:i64, v1:vec[i8],i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v34 = result(
+	for (rangeiter(0L, 15000L, 1L), appender[i64], |b: appender[i64], i: i64, oid: i64|
+		if (v5 <= lookup(v15, oid - v15hseqbase)    &&    v6 >= lookup(v15, oid - v15hseqbase),
+			merge(b, oid),
+			b
+		)
+	));
+let v34hseqbase = 0L;
+let v40 = result(
+	for (v34, appender[?], |b, i, oid|
+		merge(b, lookup(v25, oid - v25hseqbase))
+	));
+let v40hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi64, {vec[i64], vec[i64], i32, i32}](v40, v41, v37, v54);
+let v50 = joinResult.$0;
+let v50bat = joinResult.$2;
+let v50hseqbase = 0L;
+let v51 = joinResult.$1;
+let v51bat = joinResult.$3;
+let v51hseqbase = 0L;
+let v56 = result(
+	for (v50, appender[?], |b, i, oid|
+		merge(b, lookup(v34, oid - v34hseqbase))
+	));
+let v56hseqbase = 0L;
+let v96 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v90, oid - v90hseqbase))
+	));
+let v96hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi64, {vec[i64], vec[i64], i32, i32}](v56, v96, v37, v54);
+let v97 = joinResult.$0;
+let v97bat = joinResult.$2;
+let v97hseqbase = 0L;
+let v98 = joinResult.$1;
+let v98bat = joinResult.$3;
+let v98hseqbase = 0L;
+let v68 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v62, oid - v62hseqbase))
+	));
+let v68hseqbase = 0L;
+let v108 = result(
+	for (v98, appender[?], |b, i, oid|
+		merge(b, lookup(v68, oid - v68hseqbase))
+	));
+let v108hseqbase = 0L;
+let v136 = result(
+	for (rangeiter(0L, 2000L, 1L), appender[i64], |b, i, oid|
+		let offset = lookup(v122, oid - v122hseqbase);
+
+		if (strslice(v122str, i64(offset) + v122stroffset) == v7,
+			merge(b, oid),
+			b
+		)
+	));
+let v136hseqbase = 0L;
+let v138 = result(
+	for (v136, appender[?], |b, i, oid|
+		merge(b, lookup(v115, oid - v115hseqbase))
+	));
+let v138hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi32, {vec[i64], vec[i64], i32, i32}](v108, v138, v37, v54);
+let v140 = joinResult.$0;
+let v140bat = joinResult.$2;
+let v140hseqbase = 0L;
+let v141 = joinResult.$1;
+let v141bat = joinResult.$3;
+let v141hseqbase = 0L;
+let v75 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v69, oid - v69hseqbase))
+	));
+let v75hseqbase = 0L;
+let v109 = result(
+	for (v98, appender[?], |b, i, oid|
+		merge(b, lookup(v75, oid - v75hseqbase))
+	));
+let v109hseqbase = 0L;
+let v152 = result(
+	for (v140, appender[?], |b, i, oid|
+		merge(b, lookup(v109, oid - v109hseqbase))
+	));
+let v152hseqbase = 0L;
+let v166 = result(
+	for (rangeiter(0L, 100L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v160, oid - v160hseqbase))
+	));
+let v166hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi32, {vec[i64], vec[i64], i32, i32}](v152, v166, v37, v54);
+let v174 = joinResult.$0;
+let v174bat = joinResult.$2;
+let v174hseqbase = 0L;
+let v175 = joinResult.$1;
+let v175bat = joinResult.$3;
+let v175hseqbase = 0L;
+let v49 = result(
+	for (rangeiter(0L, 1500L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v43, oid - v43hseqbase))
+	));
+let v49hseqbase = 0L;
+let v59 = result(
+	for (v51, appender[?], |b, i, oid|
+		merge(b, lookup(v49, oid - v49hseqbase))
+	));
+let v59hseqbase = 0L;
+let v107 = result(
+	for (v97, appender[?], |b, i, oid|
+		merge(b, lookup(v59, oid - v59hseqbase))
+	));
+let v107hseqbase = 0L;
+let v150 = result(
+	for (v140, appender[?], |b, i, oid|
+		merge(b, lookup(v107, oid - v107hseqbase))
+	));
+let v150hseqbase = 0L;
+let v184 = result(
+	for (v174, appender[?], |b, i, oid|
+		merge(b, lookup(v150, oid - v150hseqbase))
+	));
+let v184hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi64, {vec[i64], vec[i64], i32, i32}](v184, v194, v37, v54);
+let v203 = joinResult.$0;
+let v203bat = joinResult.$2;
+let v203hseqbase = 0L;
+let v204 = joinResult.$1;
+let v204bat = joinResult.$3;
+let v204hseqbase = 0L;
+let v202 = result(
+	for (rangeiter(0L, 25L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v196, oid - v196hseqbase))
+	));
+let v202hseqbase = 0L;
+let v220 = result(
+	for (v204, appender[?], |b, i, oid|
+		merge(b, lookup(v202, oid - v202hseqbase))
+	));
+let v220hseqbase = 0L;
+let v237 = result(
+	for (rangeiter(0L, 5L, 1L), appender[i64], |b, i, oid|
+		let offset = lookup(v223, oid - v223hseqbase);
+
+		if (strslice(v223str, i64(offset) + v223stroffset) == v4,
+			merge(b, oid),
+			b
+		)
+	));
+let v237hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi64, {vec[i64], vec[i64], i32, i32}](v220, v237, v37, v54);
+let v241 = joinResult.$0;
+let v241bat = joinResult.$2;
+let v241hseqbase = 0L;
+let v242 = joinResult.$1;
+let v242bat = joinResult.$3;
+let v242hseqbase = 0L;
+let v173 = result(
+	for (rangeiter(0L, 100L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v167, oid - v167hseqbase))
+	));
+let v173hseqbase = 0L;
+let v193 = result(
+	for (v175, appender[?], |b, i, oid|
+		merge(b, lookup(v173, oid - v173hseqbase))
+	));
+let v193hseqbase = 0L;
+let v218 = result(
+	for (v203, appender[?], |b, i, oid|
+		merge(b, lookup(v193, oid - v193hseqbase))
+	));
+let v218hseqbase = 0L;
+let v260 = result(
+	for (v241, appender[?], |b, i, oid|
+		merge(b, lookup(v218, oid - v218hseqbase))
+	));
+let v260hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi64, {vec[i64], vec[i64], i32, i32}](v260, v194, v37, v54);
+let v274 = joinResult.$0;
+let v274bat = joinResult.$2;
+let v274hseqbase = 0L;
+let v275 = joinResult.$1;
+let v275bat = joinResult.$3;
+let v275hseqbase = 0L;
+let v82 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v76, oid - v76hseqbase))
+	));
+let v82hseqbase = 0L;
+let v110 = result(
+	for (v98, appender[?], |b, i, oid|
+		merge(b, lookup(v82, oid - v82hseqbase))
+	));
+let v110hseqbase = 0L;
+let v153 = result(
+	for (v140, appender[?], |b, i, oid|
+		merge(b, lookup(v110, oid - v110hseqbase))
+	));
+let v153hseqbase = 0L;
+let v187 = result(
+	for (v174, appender[?], |b, i, oid|
+		merge(b, lookup(v153, oid - v153hseqbase))
+	));
+let v187hseqbase = 0L;
+let v212 = result(
+	for (v203, appender[?], |b, i, oid|
+		merge(b, lookup(v187, oid - v187hseqbase))
+	));
+let v212hseqbase = 0L;
+let v254 = result(
+	for (v241, appender[?], |b, i, oid|
+		merge(b, lookup(v212, oid - v212hseqbase))
+	));
+let v254hseqbase = 0L;
+let v283 = result(
+	for (v274, appender[?], |b, i, oid|
+		merge(b, lookup(v254, oid - v254hseqbase))
+	));
+let v283hseqbase = 0L;
+let v89 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v83, oid - v83hseqbase))
+	));
+let v89hseqbase = 0L;
+let v111 = result(
+	for (v98, appender[?], |b, i, oid|
+		merge(b, lookup(v89, oid - v89hseqbase))
+	));
+let v111hseqbase = 0L;
+let v154 = result(
+	for (v140, appender[?], |b, i, oid|
+		merge(b, lookup(v111, oid - v111hseqbase))
+	));
+let v154hseqbase = 0L;
+let v188 = result(
+	for (v174, appender[?], |b, i, oid|
+		merge(b, lookup(v154, oid - v154hseqbase))
+	));
+let v188hseqbase = 0L;
+let v213 = result(
+	for (v203, appender[?], |b, i, oid|
+		merge(b, lookup(v188, oid - v188hseqbase))
+	));
+let v213hseqbase = 0L;
+let v255 = result(
+	for (v241, appender[?], |b, i, oid|
+		merge(b, lookup(v213, oid - v213hseqbase))
+	));
+let v255hseqbase = 0L;
+let v284 = result(
+	for (v274, appender[?], |b, i, oid|
+		merge(b, lookup(v255, oid - v255hseqbase))
+	));
+let v284hseqbase = 0L;
+let v303 = result(
+	for (v284, appender[?], |b , i, x|
+		merge(b, ((v412) - (x)))
+	));
+let v303hseqbase = 0L;
+let v306 = result(
+	for (zip(v283, v303), appender[?], |b , i, x|
+		merge(b, ((x.$0) * (x.$1)))
+	));
+let v306hseqbase = 0L;
+let v38 = result(
+	for (v34, appender[?], |b, i, oid|
+		merge(b, lookup(v15, oid - v15hseqbase))
+	));
+let v38hseqbase = 0L;
+let v55 = result(
+	for (v50, appender[?], |b, i, oid|
+		merge(b, lookup(v38, oid - v38hseqbase))
+	));
+let v55hseqbase = 0L;
+let v103 = result(
+	for (v97, appender[?], |b, i, oid|
+		merge(b, lookup(v55, oid - v55hseqbase))
+	));
+let v103hseqbase = 0L;
+let v146 = result(
+	for (v140, appender[?], |b, i, oid|
+		merge(b, lookup(v103, oid - v103hseqbase))
+	));
+let v146hseqbase = 0L;
+let v180 = result(
+	for (v174, appender[?], |b, i, oid|
+		merge(b, lookup(v146, oid - v146hseqbase))
+	));
+let v180hseqbase = 0L;
+let v205 = result(
+	for (v203, appender[?], |b, i, oid|
+		merge(b, lookup(v180, oid - v180hseqbase))
+	));
+let v205hseqbase = 0L;
+let v247 = result(
+	for (v241, appender[?], |b, i, oid|
+		merge(b, lookup(v205, oid - v205hseqbase))
+	));
+let v247hseqbase = 0L;
+let v276 = result(
+	for (v274, appender[?], |b, i, oid|
+		merge(b, lookup(v247, oid - v247hseqbase))
+	));
+let v276hseqbase = 0L;
+let v296 = result(
+	for(v276, appender[i32], |b, i, x|
+		let year = x / 365;
+
+		let leapyears = (year - 1) / 4 + (year - 1) / 400 - (year - 1) / 100 + 1;
+
+		let day = (x - year * 365) - leapyears;
+
+		merge(b,
+			iterate({day, year}, |p|
+				let year = p.$1 - 1;
+
+				let isLeap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+
+				{{p.$0 + if(isLeap, 366, 365), year}, p.$0 < 0}).$1 + 1)
+	));
+let v296hseqbase = 0L;
+let groupHash = result(
+	for(zip(v296), dictmerger[ i32, i64, min], |b, i, n|
+		merge(b, { n, i})
+	));
+let groupHashVec = tovec(groupHash);
+let groupIdsDict = result(
+	for(groupHashVec, dictmerger[ i32, i64, min], |b, i, n|
+		merge(b, {n.$0, i})
+	));
+let empty = result(
+	for(rangeiter(0L, len(groupHashVec), 1L), appender[i64], |b, i, n|
+		merge(b, 0L)
+	));
+let ids = for(zip(v296), appender[i64], |b, i, n|
+	let groupId = lookup(groupIdsDict,  n);
+
+	merge(b, groupId));
+let counts = for(zip(v296), vecmerger[i64, +](empty), |b, i, n|
+	let groupId = lookup(groupIdsDict,  n);
+
+	merge(b, {groupId, 1L}));
+let v328 = result(ids);
+let v328hseqbase = 0L;
+let v330 = result(counts);
+let v330hseqbase = 0L;
+let v329 = result(
+	for(groupHashVec, vecmerger[i64, +](empty), |b, i, n|
+		merge(b, {i, lookup(groupHash, n.$0)})
+	));
+let v329hseqbase = 0L;
+let empty = result(
+	for(rangeiter(0L, len(v329), 1L), appender[i64], |b, i, x|
+		merge(b, i64(0c))
+	));
+let v335 = result(
+	for(zip(v328, v306), vecmerger[i64, +](empty), |b, i, x|
+		merge(b, {x.$0, (x.$1)})
+	));
+let v335hseqbase = 0L;
+let v331 = result(
+	for (v329, appender[?], |b, i, oid|
+		merge(b, lookup(v296, oid - v296hseqbase))
+	));
+let v331hseqbase = 0L;
+let v273 = result(
+	for (rangeiter(0L, 25L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v267, oid - v267hseqbase))
+	));
+let v273hseqbase = 0L;
+let v273str = v267str;
+let v273stroffset = v267stroffset;
+let v294 = result(
+	for (v275, appender[?], |b, i, oid|
+		merge(b, lookup(v273, oid - v273hseqbase))
+	));
+let v294hseqbase = 0L;
+let v294str = v273str;
+let v294stroffset = v273stroffset;
+let v315 = result(
+	for (v294, appender[?], |b , i, x|
+		merge(b, i8((strslice(v294str, i64(x) + v294stroffset)) == (v1)))
+	));
+let v315hseqbase = 0L;
+let v317 = result(
+	for(v315, appender[i8], |b, i, x|
+		if(x == i8nil,
+			merge(b, 1c),
+			merge(b, 0c)
+		)
+	));
+let v317hseqbase = 0L;
+{v306, v328, v329, v335, v331, v315, v317}
+
+
+============================================
+
+|v343:vec[i64], v343hseqbase:i64, v340:vec[i64], v340hseqbase:i64, v331:vec[i32], v331hseqbase:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v346 = result(
+	for (v343, appender[?], |b, i, oid|
+		merge(b, lookup(v340, oid - v340hseqbase))
+	));
+let v346hseqbase = 0L;
+let v345 = result(
+	for (v343, appender[?], |b, i, oid|
+		merge(b, lookup(v331, oid - v331hseqbase))
+	));
+let v345hseqbase = 0L;
+{v346, v345}
+
+
+============================================
+

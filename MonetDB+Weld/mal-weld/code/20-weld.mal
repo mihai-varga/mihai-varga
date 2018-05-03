@@ -1,0 +1,177 @@
++-------------------------------------------------------------------------------------------------------------------------------------+
+| mal                                                                                                                                 |
++=====================================================================================================================================+
+| function user.main():void;                                                                                                          |
+|     X_12:void := querylog.define("explain\nselect\n s_name,\n s_address\nfrom\n supplier,\n nation\nwhere\n s_suppkey in (\n select |
+: \n ps_suppkey\n from\n partsupp\n where\n ps_partkey in (\n select\n p_partkey\n from\n part\n where\n p_name like 'forest%'\n )\n  :
+: and ps_availqty > (\n select\n 0.5 * sum(l_quantity)\n from\n lineitem\n where\n l_partkey = ps_partkey\n and l_suppkey = ps_suppke :
+: y\n and l_shipdate >= date '1994-01-01'\n and l_shipdate < date '1994-01-01' + interval '1' year\n )\n )\n and s_nationkey = n_nati :
+: onkey\n and n_name = 'CANADA'\norder by\n s_name;":str, "weld_pipe":str, 192:int);                                                  :
+|     X_268:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_275:bat[:str] := bat.append(X_268:bat[:str], "sys.supplier":str);                                                             |
+|     X_285:bat[:str] := bat.append(X_275:bat[:str], "sys.supplier":str);                                                             |
+|     X_270:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_277:bat[:str] := bat.append(X_270:bat[:str], "s_name":str);                                                                   |
+|     X_286:bat[:str] := bat.append(X_277:bat[:str], "s_address":str);                                                                |
+|     X_271:bat[:str] := bat.new(nil:str);                                                                                            |
+|     X_279:bat[:str] := bat.append(X_271:bat[:str], "char":str);                                                                     |
+|     X_288:bat[:str] := bat.append(X_279:bat[:str], "varchar":str);                                                                  |
+|     X_272:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_281:bat[:int] := bat.append(X_272:bat[:int], 25:int);                                                                         |
+|     X_290:bat[:int] := bat.append(X_281:bat[:int], 40:int);                                                                         |
+|     X_274:bat[:int] := bat.new(nil:int);                                                                                            |
+|     X_283:bat[:int] := bat.append(X_274:bat[:int], 0:int);                                                                          |
+|     X_292:bat[:int] := bat.append(X_283:bat[:int], 0:int);                                                                          |
+|     X_15:int := sql.mvc();                                                                                                          |
+|     C_16:bat[:oid] := sql.tid(X_15:int, "sys":str, "supplier":str);                                                                 |
+|     X_19:bat[:int] := sql.bind(X_15:int, "sys":str, "supplier":str, "s_suppkey":str, 0:int);                                        |
+|     X_29:bat[:str] := sql.bind(X_15:int, "sys":str, "supplier":str, "s_name":str, 0:int);                                           |
+|     X_36:bat[:str] := sql.bind(X_15:int, "sys":str, "supplier":str, "s_address":str, 0:int);                                        |
+|     X_43:bat[:oid] := sql.bind_idxbat(X_15:int, "sys":str, "supplier":str, "supplier_s_nationkey_fkey":str, 0:int);                 |
+|     (X_46:bat[:oid], X_47:bat[:oid]) := sql.bind_idxbat(X_15:int, "sys":str, "supplier":str, "supplier_s_nationkey_fkey":str, 2:int |
+: );                                                                                                                                  :
+|     X_45:bat[:oid] := sql.bind_idxbat(X_15:int, "sys":str, "supplier":str, "supplier_s_nationkey_fkey":str, 1:int);                 |
+|     X_48:bat[:oid] := sql.delta(X_43:bat[:oid], X_46:bat[:oid], X_47:bat[:oid], X_45:bat[:oid]);                                    |
+|     C_50:bat[:oid] := sql.tid(X_15:int, "sys":str, "partsupp":str);                                                                 |
+|     X_52:bat[:int] := sql.bind(X_15:int, "sys":str, "partsupp":str, "ps_partkey":str, 0:int);                                       |
+|     X_59:bat[:int] := sql.bind(X_15:int, "sys":str, "partsupp":str, "ps_suppkey":str, 0:int);                                       |
+|     X_66:bat[:int] := sql.bind(X_15:int, "sys":str, "partsupp":str, "ps_availqty":str, 0:int);                                      |
+|     X_73:bat[:lng] := sql.bind_idxbat(X_15:int, "sys":str, "partsupp":str, "partsupp_ps_partkey_ps_suppkey_pkey":str, 0:int);       |
+|     (X_76:bat[:oid], X_77:bat[:lng]) := sql.bind_idxbat(X_15:int, "sys":str, "partsupp":str, "partsupp_ps_partkey_ps_suppkey_pkey": |
+: str, 2:int);                                                                                                                        :
+|     X_75:bat[:lng] := sql.bind_idxbat(X_15:int, "sys":str, "partsupp":str, "partsupp_ps_partkey_ps_suppkey_pkey":str, 1:int);       |
+|     X_78:bat[:lng] := sql.delta(X_73:bat[:lng], X_76:bat[:oid], X_77:bat[:lng], X_75:bat[:lng]);                                    |
+|     C_80:bat[:oid] := sql.tid(X_15:int, "sys":str, "part":str);                                                                     |
+|     X_82:bat[:int] := sql.bind(X_15:int, "sys":str, "part":str, "p_partkey":str, 0:int);                                            |
+|     X_89:bat[:str] := sql.bind(X_15:int, "sys":str, "part":str, "p_name":str, 0:int);                                               |
+|     C_116:bat[:oid] := sql.tid(X_15:int, "sys":str, "lineitem":str);                                                                |
+|     X_118:bat[:int] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_partkey":str, 0:int);                                       |
+|     X_125:bat[:int] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_suppkey":str, 0:int);                                       |
+|     X_132:bat[:lng] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_quantity":str, 0:int);                                      |
+|     X_139:bat[:date] := sql.bind(X_15:int, "sys":str, "lineitem":str, "l_shipdate":str, 0:int);                                     |
+|     C_234:bat[:oid] := sql.tid(X_15:int, "sys":str, "nation":str);                                                                  |
+|     X_236:bat[:str] := sql.bind(X_15:int, "sys":str, "nation":str, "n_name":str, 0:int);                                            |
+|     wstate:ptr := weld.initstate();                                                                                                 |
+|     X_242:bat[:str] := weld.algebraprojection(C_234:bat[:oid], X_236:bat[:str], wstate:ptr);                                        |
+|     X_249:bat[:oid] := weld.algebrathetaselect(X_242:bat[:str], "CANADA":str, "==":str, wstate:ptr);                                |
+|     X_252:bat[:oid] := weld.algebraprojection(X_249:bat[:oid], C_234:bat[:oid], wstate:ptr);                                        |
+|     X_28:bat[:int] := weld.algebraprojection(C_16:bat[:oid], X_19:bat[:int], wstate:ptr);                                           |
+|     X_228:bat[:oid] := weld.batmirror(X_28:bat[:int], wstate:ptr);                                                                  |
+|     X_145:bat[:date] := weld.algebraprojection(C_116:bat[:oid], X_139:bat[:date], wstate:ptr);                                      |
+|     X_150:bat[:oid] := weld.algebraselect(X_145:bat[:date], "1994-01-01":date, "1995-01-01":date, true:bit, false:bit, false:bit, w |
+: state:ptr);                                                                                                                         :
+|     X_138:bat[:lng] := weld.algebraprojection(C_116:bat[:oid], X_132:bat[:lng], wstate:ptr);                                        |
+|     X_156:bat[:lng] := weld.algebraprojection(X_150:bat[:oid], X_138:bat[:lng], wstate:ptr);                                        |
+|     X_131:bat[:int] := weld.algebraprojection(C_116:bat[:oid], X_125:bat[:int], wstate:ptr);                                        |
+|     X_155:bat[:int] := weld.algebraprojection(X_150:bat[:oid], X_131:bat[:int], wstate:ptr);                                        |
+|     X_124:bat[:int] := weld.algebraprojection(C_116:bat[:oid], X_118:bat[:int], wstate:ptr);                                        |
+|     X_154:bat[:int] := weld.algebraprojection(X_150:bat[:oid], X_124:bat[:int], wstate:ptr);                                        |
+|     X_58:bat[:int] := weld.algebraprojection(C_50:bat[:oid], X_52:bat[:int], wstate:ptr);                                           |
+|     X_107:bat[:oid] := weld.batmirror(X_58:bat[:int], wstate:ptr);                                                                  |
+|     X_95:bat[:str] := weld.algebraprojection(C_80:bat[:oid], X_89:bat[:str], wstate:ptr);                                           |
+|     X_88:bat[:int] := weld.algebraprojection(C_80:bat[:oid], X_82:bat[:int], wstate:ptr);                                           |
+|     X_79:bat[:lng] := weld.algebraprojection(C_50:bat[:oid], X_78:bat[:lng], wstate:ptr);                                           |
+|     X_72:bat[:int] := weld.algebraprojection(C_50:bat[:oid], X_66:bat[:int], wstate:ptr);                                           |
+|     X_65:bat[:int] := weld.algebraprojection(C_50:bat[:oid], X_59:bat[:int], wstate:ptr);                                           |
+|     X_49:bat[:oid] := weld.algebraprojection(C_16:bat[:oid], X_48:bat[:oid], wstate:ptr);                                           |
+|     X_42:bat[:str] := weld.algebraprojection(C_16:bat[:oid], X_36:bat[:str], wstate:ptr);                                           |
+|     X_35:bat[:str] := weld.algebraprojection(C_16:bat[:oid], X_29:bat[:str], wstate:ptr);                                           |
+|     (X_252:bat[:oid], X_28:bat[:int], X_228:bat[:oid], X_156:bat[:lng], X_155:bat[:int], X_154:bat[:int], X_58:bat[:int], X_107:bat |
+: [:oid], X_95:bat[:str], X_88:bat[:int], X_79:bat[:lng], X_72:bat[:int], X_65:bat[:int], X_49:bat[:oid], X_42:bat[:str], X_35:bat[:s :
+: tr]) := weld.run(wstate:ptr, C_234:bat[:oid], X_236:bat[:str], "CANADA":str, "==":str, C_16:bat[:oid], X_19:bat[:int], C_116:bat[:o :
+: id], X_139:bat[:date], "1994-01-01":date, "1995-01-01":date, true:bit, false:bit, false:bit, X_132:bat[:lng], X_125:bat[:int], X_11 :
+: 8:bat[:int], C_50:bat[:oid], X_52:bat[:int], C_80:bat[:oid], X_89:bat[:str], X_82:bat[:int], X_78:bat[:lng], X_66:bat[:int], X_59:b :
+: at[:int], X_48:bat[:oid], X_36:bat[:str], X_29:bat[:str]);                                                                          :
+|     C_99:bat[:oid] := algebra.likeselect(X_95:bat[:str], nil:BAT, "forest%":str, "":str, false:bit);                                |
+|     wstate:ptr := weld.initstate();                                                                                                 |
+|     X_102:bat[:int] := weld.algebraprojection(C_99:bat[:oid], X_88:bat[:int], wstate:ptr);                                          |
+|     (X_104:bat[:oid], X_105:bat[:oid]) := weld.algebrajoin(X_58:bat[:int], X_102:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng, w |
+: state:ptr);                                                                                                                         :
+|     X_108:bat[:oid] := weld.algebraintersect(X_107:bat[:oid], X_104:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng, wstate:ptr);   |
+|     X_109:bat[:int] := weld.algebraprojection(X_108:bat[:oid], X_58:bat[:int], wstate:ptr);                                         |
+|     X_113:bat[:oid] := weld.batcalcidentity(X_109:bat[:int], wstate:ptr);                                                           |
+|     X_112:bat[:lng] := weld.algebraprojection(X_108:bat[:oid], X_79:bat[:lng], wstate:ptr);                                         |
+|     X_111:bat[:int] := weld.algebraprojection(X_108:bat[:oid], X_72:bat[:int], wstate:ptr);                                         |
+|     X_110:bat[:int] := weld.algebraprojection(X_108:bat[:oid], X_65:bat[:int], wstate:ptr);                                         |
+|     (X_109:bat[:int], X_113:bat[:oid], X_112:bat[:lng], X_111:bat[:int], X_110:bat[:int]) := weld.run(wstate:ptr, C_99:bat[:oid], X |
+: _88:bat[:int], X_58:bat[:int], nil:BAT, false:bit, nil:lng, X_107:bat[:oid], X_79:bat[:lng], X_72:bat[:int], X_65:bat[:int]);       :
+|     X_160:bat[:lng] := batmkey.hash(X_154:bat[:int]);                                                                               |
+|     X_163:bat[:lng] := mkey.bulk_rotate_xor_hash(X_160:bat[:lng], 22:int, X_155:bat[:int]);                                         |
+|     wstate:ptr := weld.initstate();                                                                                                 |
+|     (X_173:bat[:oid], X_174:bat[:oid]) := weld.algebrajoin(X_112:bat[:lng], X_163:bat[:lng], nil:BAT, nil:BAT, false:bit, nil:lng,  |
+: wstate:ptr);                                                                                                                        :
+|     X_175:bat[:int] := weld.algebraprojection(X_173:bat[:oid], X_109:bat[:int], wstate:ptr);                                        |
+|     X_176:bat[:int] := weld.algebraprojection(X_174:bat[:oid], X_154:bat[:int], wstate:ptr);                                        |
+|     X_177:bat[:bit] := weld.batcalceq(X_175:bat[:int], X_176:bat[:int], wstate:ptr);                                                |
+|     X_181:bat[:oid] := weld.algebrathetaselect(X_177:bat[:bit], true:bit, "==":str, wstate:ptr);                                    |
+|     X_182:bat[:oid] := weld.algebraprojection(X_181:bat[:oid], X_173:bat[:oid], wstate:ptr);                                        |
+|     X_184:bat[:int] := weld.algebraprojection(X_182:bat[:oid], X_110:bat[:int], wstate:ptr);                                        |
+|     X_183:bat[:oid] := weld.algebraprojection(X_181:bat[:oid], X_174:bat[:oid], wstate:ptr);                                        |
+|     X_185:bat[:int] := weld.algebraprojection(X_183:bat[:oid], X_155:bat[:int], wstate:ptr);                                        |
+|     X_186:bat[:bit] := weld.batcalceq(X_184:bat[:int], X_185:bat[:int], wstate:ptr);                                                |
+|     X_189:bat[:oid] := weld.algebrathetaselect(X_186:bat[:bit], true:bit, "==":str, wstate:ptr);                                    |
+|     X_191:bat[:oid] := weld.algebraprojection(X_189:bat[:oid], X_183:bat[:oid], wstate:ptr);                                        |
+|     X_199:bat[:lng] := weld.algebraprojection(X_191:bat[:oid], X_156:bat[:lng], wstate:ptr);                                        |
+|     X_190:bat[:oid] := weld.algebraprojection(X_189:bat[:oid], X_182:bat[:oid], wstate:ptr);                                        |
+|     X_196:bat[:oid] := weld.algebraprojection(X_190:bat[:oid], X_113:bat[:oid], wstate:ptr);                                        |
+|     (X_201:bat[:oid], X_202:bat[:oid], X_203:bat[:lng]) := weld.groupgroup(X_196:bat[:oid], wstate:ptr);                            |
+|     X_207:bat[:lng] := weld.aggrsubsum(X_199:bat[:lng], X_201:bat[:oid], X_202:bat[:oid], true:bit, true:bit, wstate:ptr);          |
+|     X_209:bat[:lng] := weld.batcalcmul(X_207:bat[:lng], 5:bte, wstate:ptr);                                                         |
+|     X_194:bat[:int] := weld.algebraprojection(X_190:bat[:oid], X_111:bat[:int], wstate:ptr);                                        |
+|     X_205:bat[:int] := weld.algebraprojection(X_202:bat[:oid], X_194:bat[:int], wstate:ptr);                                        |
+|     X_193:bat[:int] := weld.algebraprojection(X_190:bat[:oid], X_110:bat[:int], wstate:ptr);                                        |
+|     X_204:bat[:int] := weld.algebraprojection(X_202:bat[:oid], X_193:bat[:int], wstate:ptr);                                        |
+|     (X_209:bat[:lng], X_205:bat[:int], X_204:bat[:int]) := weld.run(wstate:ptr, X_112:bat[:lng], X_163:bat[:lng], nil:BAT, false:bi |
+: t, nil:lng, X_109:bat[:int], X_154:bat[:int], true:bit, "==":str, X_110:bat[:int], X_155:bat[:int], true:bit, X_156:bat[:lng], X_11 :
+: 3:bat[:oid], 5:bte, X_111:bat[:int]);                                                                                               :
+|     X_211:bat[:lng] := batcalc.lng(X_205:bat[:int], 18:int, 3:int);                                                                 |
+|     wstate:ptr := weld.initstate();                                                                                                 |
+|     X_216:bat[:bit] := weld.batcalcgt(X_211:bat[:lng], X_209:bat[:lng], wstate:ptr);                                                |
+|     X_218:bat[:oid] := weld.algebraselect(X_216:bat[:bit], true:bit, true:bit, true:bit, true:bit, false:bit, wstate:ptr);          |
+|     X_220:bat[:int] := weld.algebraprojection(X_218:bat[:oid], X_204:bat[:int], wstate:ptr);                                        |
+|     (X_223:bat[:oid], X_224:bat[:oid]) := weld.algebrajoin(X_28:bat[:int], X_220:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng, w |
+: state:ptr);                                                                                                                         :
+|     X_229:bat[:oid] := weld.algebraintersect(X_228:bat[:oid], X_223:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng, wstate:ptr);   |
+|     X_233:bat[:oid] := weld.algebraprojection(X_229:bat[:oid], X_49:bat[:oid], wstate:ptr);                                         |
+|     (X_253:bat[:oid], X_254:bat[:oid]) := weld.algebrajoin(X_233:bat[:oid], X_252:bat[:oid], nil:BAT, nil:BAT, false:bit, nil:lng,  |
+: wstate:ptr);                                                                                                                        :
+|     X_232:bat[:str] := weld.algebraprojection(X_229:bat[:oid], X_42:bat[:str], wstate:ptr);                                         |
+|     X_258:bat[:str] := weld.algebraprojection(X_253:bat[:oid], X_232:bat[:str], wstate:ptr);                                        |
+|     X_231:bat[:str] := weld.algebraprojection(X_229:bat[:oid], X_35:bat[:str], wstate:ptr);                                         |
+|     X_257:bat[:str] := weld.algebraprojection(X_253:bat[:oid], X_231:bat[:str], wstate:ptr);                                        |
+|     (X_258:bat[:str], X_257:bat[:str]) := weld.run(wstate:ptr, X_211:bat[:lng], X_209:bat[:lng], true:bit, false:bit, X_204:bat[:in |
+: t], X_28:bat[:int], nil:BAT, nil:BAT, nil:lng, X_228:bat[:oid], X_49:bat[:oid], X_252:bat[:oid], false:bit, X_42:bat[:str], X_35:ba :
+: t[:str]);                                                                                                                           :
+|     (X_262:bat[:str], X_263:bat[:oid], X_264:bat[:oid]) := algebra.sort(X_257:bat[:str], false:bit, false:bit);                     |
+|     wstate:ptr := weld.initstate();                                                                                                 |
+|     X_266:bat[:str] := weld.algebraprojection(X_263:bat[:oid], X_258:bat[:str], wstate:ptr);                                        |
+|     X_265:bat[:str] := weld.algebraprojection(X_263:bat[:oid], X_257:bat[:str], wstate:ptr);                                        |
+|     (X_266:bat[:str], X_265:bat[:str]) := weld.run(wstate:ptr, X_263:bat[:oid], X_258:bat[:str], X_257:bat[:str]);                  |
+|     sql.resultSet(X_285:bat[:str], X_286:bat[:str], X_288:bat[:str], X_290:bat[:int], X_292:bat[:int], X_265:bat[:str], X_266:bat[: |
+: str]);                                                                                                                              :
+| end user.main;                                                                                                                      |
+| #inline               actions= 0 time=5 usec                                                                                        |
+| #remap                actions= 7 time=111 usec                                                                                      |
+| #costmodel            actions= 1 time=5 usec                                                                                        |
+| #coercion             actions= 4 time=22 usec                                                                                       |
+| #evaluate             actions=14 time=72 usec                                                                                       |
+| #emptybind            actions=13 time=29 usec                                                                                       |
+| #pushselect           actions= 0 time=5 usec                                                                                        |
+| #aliases              actions=27 time=24 usec                                                                                       |
+| #deadcode             actions=45 time=32 usec                                                                                       |
+| #weld                 actions=66 time=684 usec                                                                                      |
+| #aliases              actions= 0 time=1 usec                                                                                        |
+| #constants            actions=26 time=41 usec                                                                                       |
+| #commonTerms          actions= 0 time=15 usec                                                                                       |
+| #projectionpath       actions= 0 time=7 usec                                                                                        |
+| #deadcode             actions= 0 time=72 usec                                                                                       |
+| #matpack              actions= 0 time=1 usec                                                                                        |
+| #multiplex            actions= 0 time=3 usec                                                                                        |
+| #profiler             actions=1 time=3 usec                                                                                         |
+| #candidates           actions=1 time=1 usec                                                                                         |
+| #deadcode             actions= 0 time=22 usec                                                                                       |
+| #wlc                  actions= 0 time=0 usec                                                                                        |
+| #garbagecollector     actions= 1 time=141 usec                                                                                      |
+| #total                actions=25 time=1505 usec                                                                                     |
++-------------------------------------------------------------------------------------------------------------------------------------+
+150 tuples

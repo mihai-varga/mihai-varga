@@ -1,0 +1,149 @@
++-------------------------------------------------------------------------------------------------------------------------------------+
+| mal                                                                                                                                 |
++=====================================================================================================================================+
+| function user.s2_1():void;                                                                                                          |
+|     X_41:void := querylog.define("explain\nselect\n sum(l_extendedprice* (1 - l_discount)) as revenue\nfrom\n lineitem,\n part\nwhe |
+: re\n (\n p_partkey = l_partkey\n and p_brand = \\'Brand#12\\'\n and p_container in (\\'SM CASE\\', \\'SM BOX\\', \\'SM PACK\\', \\' :
+: SM PKG\\')\n and l_quantity >= 1 and l_quantity <= 1 + 10\n and p_size between 1 and 5\n and l_shipmode in (\\'AIR\\', \\'AIR REG\\ :
+: ')\n and l_shipinstruct = \\'DELIVER IN PERSON\\'\n )\n or\n (\n p_partkey = l_partkey\n and p_brand = \\'Brand#23\\'\n and p_conta :
+: iner in (\\'MED BAG\\', \\'MED BOX\\', \\'MED PKG\\', \\'MED PACK\\')\n and l_quantity >= 10 and l_quantity <= 10 + 10\n and p_size :
+:  between 1 and 10\n and l_shipmode in (\\'AIR\\', \\'AIR REG\\')\n and l_shipinstruct = \\'DELIVER IN PERSON\\'\n )\n or\n (\n p_pa :
+: rtkey = l_partkey\n and p_brand = \\'Brand#34\\'\n and p_container in (\\'LG CASE\\', \\'LG BOX\\', \\'LG PACK\\', \\'LG PKG\\')\n  :
+: and l_quantity >= 20 and l_quantity <= 20 + 10\n and p_size between 1 and 15\n and l_shipmode in (\\'AIR\\', \\'AIR REG\\')\n and l :
+: _shipinstruct = \\'DELIVER IN PERSON\\'\n );":str, "weld_pipe":str, 359:int);                                                       :
+|     X_44:int := sql.mvc();                                                                                                          |
+|     C_45:bat[:oid] := sql.tid(X_44:int, "sys":str, "part":str);                                                                     |
+|     X_48:bat[:int] := sql.bind(X_44:int, "sys":str, "part":str, "p_partkey":str, 0:int);                                            |
+|     X_72:bat[:str] := sql.bind(X_44:int, "sys":str, "part":str, "p_brand":str, 0:int);                                              |
+|     X_86:bat[:int] := sql.bind(X_44:int, "sys":str, "part":str, "p_size":str, 0:int);                                               |
+|     X_93:bat[:str] := sql.bind(X_44:int, "sys":str, "part":str, "p_container":str, 0:int);                                          |
+|     C_114:bat[:oid] := sql.tid(X_44:int, "sys":str, "lineitem":str);                                                                |
+|     X_123:bat[:int] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_partkey":str, 0:int);                                       |
+|     X_144:bat[:lng] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_quantity":str, 0:int);                                      |
+|     X_151:bat[:lng] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_extendedprice":str, 0:int);                                 |
+|     X_158:bat[:lng] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_discount":str, 0:int);                                      |
+|     X_207:bat[:str] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_shipinstruct":str, 0:int);                                  |
+|     X_214:bat[:str] := sql.bind(X_44:int, "sys":str, "lineitem":str, "l_shipmode":str, 0:int);                                      |
+|     wstate:ptr := weld.initstate();                                                                                                 |
+|     X_57:bat[:int] := weld.algebraprojection(C_45:bat[:oid], X_48:bat[:int], wstate:ptr);                                           |
+|     X_129:bat[:int] := weld.algebraprojection(C_114:bat[:oid], X_123:bat[:int], wstate:ptr);                                        |
+|     (X_249:bat[:oid], X_250:bat[:oid]) := weld.algebrajoin(X_57:bat[:int], X_129:bat[:int], nil:BAT, nil:BAT, false:bit, nil:lng, w |
+: state:ptr);                                                                                                                         :
+|     X_99:bat[:str] := weld.algebraprojection(C_45:bat[:oid], X_93:bat[:str], wstate:ptr);                                           |
+|     X_261:bat[:str] := weld.algebraprojection(X_249:bat[:oid], X_99:bat[:str], wstate:ptr);                                         |
+|     X_220:bat[:str] := weld.algebraprojection(C_114:bat[:oid], X_214:bat[:str], wstate:ptr);                                        |
+|     X_279:bat[:str] := weld.algebraprojection(X_250:bat[:oid], X_220:bat[:str], wstate:ptr);                                        |
+|     X_150:bat[:lng] := weld.algebraprojection(C_114:bat[:oid], X_144:bat[:lng], wstate:ptr);                                        |
+|     X_269:bat[:lng] := weld.algebraprojection(X_250:bat[:oid], X_150:bat[:lng], wstate:ptr);                                        |
+|     X_92:bat[:int] := weld.algebraprojection(C_45:bat[:oid], X_86:bat[:int], wstate:ptr);                                           |
+|     X_260:bat[:int] := weld.algebraprojection(X_249:bat[:oid], X_92:bat[:int], wstate:ptr);                                         |
+|     X_213:bat[:str] := weld.algebraprojection(C_114:bat[:oid], X_207:bat[:str], wstate:ptr);                                        |
+|     X_278:bat[:str] := weld.algebraprojection(X_250:bat[:oid], X_213:bat[:str], wstate:ptr);                                        |
+|     X_78:bat[:str] := weld.algebraprojection(C_45:bat[:oid], X_72:bat[:str], wstate:ptr);                                           |
+|     X_258:bat[:str] := weld.algebraprojection(X_249:bat[:oid], X_78:bat[:str], wstate:ptr);                                         |
+|     X_292:bat[:oid] := weld.algebrathetaselect(X_258:bat[:str], "Brand#12":str, "==":str, wstate:ptr);                              |
+|     X_298:bat[:oid] := weld.algebrathetaselect(X_278:bat[:str], X_292:bat[:oid], "DELIVER IN PERSON":str, "==":str, wstate:ptr);    |
+|     X_303:bat[:oid] := weld.algebraselect(X_260:bat[:int], X_298:bat[:oid], 1:int, 5:int, true:bit, true:bit, false:bit, wstate:ptr |
+: );                                                                                                                                  :
+|     X_315:bat[:oid] := weld.algebraselect(X_269:bat[:lng], X_303:bat[:oid], 100:lng, 1100:lng, true:bit, true:bit, false:bit, wstat |
+: e:ptr);                                                                                                                             :
+|     X_318:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_315:bat[:oid], "AIR":str, "==":str, wstate:ptr);                  |
+|     X_326:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_315:bat[:oid], "AIR":str, "==":str, wstate:ptr);                  |
+|     X_328:bat[:oid] := weld.batmergecand(X_318:bat[:oid], X_326:bat[:oid], wstate:ptr);                                             |
+|     X_332:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_315:bat[:oid], "AIR REG":str, "==":str, wstate:ptr);              |
+|     X_333:bat[:oid] := weld.batmergecand(X_328:bat[:oid], X_332:bat[:oid], wstate:ptr);                                             |
+|     X_336:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_333:bat[:oid], "SM CASE":str, "==":str, wstate:ptr);              |
+|     X_339:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_333:bat[:oid], "SM CASE":str, "==":str, wstate:ptr);              |
+|     X_340:bat[:oid] := weld.batmergecand(X_336:bat[:oid], X_339:bat[:oid], wstate:ptr);                                             |
+|     X_344:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_333:bat[:oid], "SM BOX":str, "==":str, wstate:ptr);               |
+|     X_345:bat[:oid] := weld.batmergecand(X_340:bat[:oid], X_344:bat[:oid], wstate:ptr);                                             |
+|     X_348:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_333:bat[:oid], "SM PACK":str, "==":str, wstate:ptr);              |
+|     X_349:bat[:oid] := weld.batmergecand(X_345:bat[:oid], X_348:bat[:oid], wstate:ptr);                                             |
+|     X_352:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_333:bat[:oid], "SM PKG":str, "==":str, wstate:ptr);               |
+|     X_353:bat[:oid] := weld.batmergecand(X_349:bat[:oid], X_352:bat[:oid], wstate:ptr);                                             |
+|     X_361:bat[:oid] := weld.algebrathetaselect(X_258:bat[:str], "Brand#23":str, "==":str, wstate:ptr);                              |
+|     X_367:bat[:oid] := weld.algebrathetaselect(X_278:bat[:str], X_361:bat[:oid], "DELIVER IN PERSON":str, "==":str, wstate:ptr);    |
+|     X_372:bat[:oid] := weld.algebraselect(X_260:bat[:int], X_367:bat[:oid], 1:int, 10:int, true:bit, true:bit, false:bit, wstate:pt |
+: r);                                                                                                                                 :
+|     X_384:bat[:oid] := weld.algebraselect(X_269:bat[:lng], X_372:bat[:oid], 1000:lng, 2000:lng, true:bit, true:bit, false:bit, wsta |
+: te:ptr);                                                                                                                            :
+|     X_387:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_384:bat[:oid], "AIR":str, "==":str, wstate:ptr);                  |
+|     X_395:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_384:bat[:oid], "AIR":str, "==":str, wstate:ptr);                  |
+|     X_397:bat[:oid] := weld.batmergecand(X_387:bat[:oid], X_395:bat[:oid], wstate:ptr);                                             |
+|     X_401:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_384:bat[:oid], "AIR REG":str, "==":str, wstate:ptr);              |
+|     X_402:bat[:oid] := weld.batmergecand(X_397:bat[:oid], X_401:bat[:oid], wstate:ptr);                                             |
+|     X_405:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_402:bat[:oid], "MED BAG":str, "==":str, wstate:ptr);              |
+|     X_408:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_402:bat[:oid], "MED BAG":str, "==":str, wstate:ptr);              |
+|     X_409:bat[:oid] := weld.batmergecand(X_405:bat[:oid], X_408:bat[:oid], wstate:ptr);                                             |
+|     X_412:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_402:bat[:oid], "MED BOX":str, "==":str, wstate:ptr);              |
+|     X_413:bat[:oid] := weld.batmergecand(X_409:bat[:oid], X_412:bat[:oid], wstate:ptr);                                             |
+|     X_416:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_402:bat[:oid], "MED PKG":str, "==":str, wstate:ptr);              |
+|     X_417:bat[:oid] := weld.batmergecand(X_413:bat[:oid], X_416:bat[:oid], wstate:ptr);                                             |
+|     X_421:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_402:bat[:oid], "MED PACK":str, "==":str, wstate:ptr);             |
+|     X_422:bat[:oid] := weld.batmergecand(X_417:bat[:oid], X_421:bat[:oid], wstate:ptr);                                             |
+|     X_423:bat[:oid] := weld.batmergecand(X_353:bat[:oid], X_422:bat[:oid], wstate:ptr);                                             |
+|     X_430:bat[:oid] := weld.algebrathetaselect(X_258:bat[:str], "Brand#34":str, "==":str, wstate:ptr);                              |
+|     X_436:bat[:oid] := weld.algebrathetaselect(X_278:bat[:str], X_430:bat[:oid], "DELIVER IN PERSON":str, "==":str, wstate:ptr);    |
+|     X_441:bat[:oid] := weld.algebraselect(X_260:bat[:int], X_436:bat[:oid], 1:int, 15:int, true:bit, true:bit, false:bit, wstate:pt |
+: r);                                                                                                                                 :
+|     X_453:bat[:oid] := weld.algebraselect(X_269:bat[:lng], X_441:bat[:oid], 2000:lng, 3000:lng, true:bit, true:bit, false:bit, wsta |
+: te:ptr);                                                                                                                            :
+|     X_456:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_453:bat[:oid], "AIR":str, "==":str, wstate:ptr);                  |
+|     X_464:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_453:bat[:oid], "AIR":str, "==":str, wstate:ptr);                  |
+|     X_466:bat[:oid] := weld.batmergecand(X_456:bat[:oid], X_464:bat[:oid], wstate:ptr);                                             |
+|     X_470:bat[:oid] := weld.algebrathetaselect(X_279:bat[:str], X_453:bat[:oid], "AIR REG":str, "==":str, wstate:ptr);              |
+|     X_471:bat[:oid] := weld.batmergecand(X_466:bat[:oid], X_470:bat[:oid], wstate:ptr);                                             |
+|     X_474:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_471:bat[:oid], "LG CASE":str, "==":str, wstate:ptr);              |
+|     X_477:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_471:bat[:oid], "LG CASE":str, "==":str, wstate:ptr);              |
+|     X_478:bat[:oid] := weld.batmergecand(X_474:bat[:oid], X_477:bat[:oid], wstate:ptr);                                             |
+|     X_482:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_471:bat[:oid], "LG BOX":str, "==":str, wstate:ptr);               |
+|     X_483:bat[:oid] := weld.batmergecand(X_478:bat[:oid], X_482:bat[:oid], wstate:ptr);                                             |
+|     X_486:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_471:bat[:oid], "LG PACK":str, "==":str, wstate:ptr);              |
+|     X_487:bat[:oid] := weld.batmergecand(X_483:bat[:oid], X_486:bat[:oid], wstate:ptr);                                             |
+|     X_490:bat[:oid] := weld.algebrathetaselect(X_261:bat[:str], X_471:bat[:oid], "LG PKG":str, "==":str, wstate:ptr);               |
+|     X_491:bat[:oid] := weld.batmergecand(X_487:bat[:oid], X_490:bat[:oid], wstate:ptr);                                             |
+|     X_492:bat[:oid] := weld.batmergecand(X_423:bat[:oid], X_491:bat[:oid], wstate:ptr);                                             |
+|     X_157:bat[:lng] := weld.algebraprojection(C_114:bat[:oid], X_151:bat[:lng], wstate:ptr);                                        |
+|     X_270:bat[:lng] := weld.algebraprojection(X_250:bat[:oid], X_157:bat[:lng], wstate:ptr);                                        |
+|     X_508:bat[:lng] := weld.algebraprojection(X_492:bat[:oid], X_270:bat[:lng], wstate:ptr);                                        |
+|     X_164:bat[:lng] := weld.algebraprojection(C_114:bat[:oid], X_158:bat[:lng], wstate:ptr);                                        |
+|     X_271:bat[:lng] := weld.algebraprojection(X_250:bat[:oid], X_164:bat[:lng], wstate:ptr);                                        |
+|     X_509:bat[:lng] := weld.algebraprojection(X_492:bat[:oid], X_271:bat[:lng], wstate:ptr);                                        |
+|     X_527:bat[:lng] := weld.batcalcsub(100:lng, X_509:bat[:lng], wstate:ptr);                                                       |
+|     X_530:bat[:lng] := weld.batcalcmul(X_508:bat[:lng], X_527:bat[:lng], wstate:ptr);                                               |
+|     X_532:lng := weld.aggrsum(X_530:bat[:lng], wstate:ptr);                                                                         |
+|     X_532:lng := weld.run(wstate:ptr, C_45:bat[:oid], X_48:bat[:int], C_114:bat[:oid], X_123:bat[:int], nil:BAT, nil:BAT, false:bit |
+: , nil:lng, X_93:bat[:str], X_214:bat[:str], X_144:bat[:lng], X_86:bat[:int], X_207:bat[:str], X_72:bat[:str], "Brand#12":str, "==": :
+: str, "DELIVER IN PERSON":str, 1:int, 5:int, true:bit, true:bit, false:bit, 100:lng, 1100:lng, "AIR":str, "AIR":str, "==":str, "AIR  :
+: REG":str, "SM CASE":str, "SM CASE":str, "SM BOX":str, "SM PACK":str, "SM PKG":str, "Brand#23":str, "==":str, "DELIVER IN PERSON":st :
+: r, 10:int, true:bit, true:bit, false:bit, 1000:lng, 2000:lng, "==":str, "AIR REG":str, "MED BAG":str, "MED BAG":str, "MED BOX":str, :
+:  "MED PKG":str, "MED PACK":str, "Brand#34":str, "==":str, "DELIVER IN PERSON":str, 1:int, 15:int, true:bit, true:bit, false:bit, 30 :
+: 00:lng, "AIR":str, "AIR":str, "==":str, "AIR REG":str, "LG CASE":str, "LG CASE":str, "LG BOX":str, "LG PACK":str, "LG PKG":str, X_1 :
+: 51:bat[:lng], X_158:bat[:lng], 100:lng);                                                                                            :
+|     sql.resultSet("sys.L22":str, "revenue":str, "decimal":str, 18:int, 4:int, 10:int, X_532:lng);                                   |
+| end user.s2_1;                                                                                                                      |
+| #inline               actions= 0 time=18 usec                                                                                       |
+| #remap                actions= 2 time=78 usec                                                                                       |
+| #costmodel            actions= 1 time=6 usec                                                                                        |
+| #coercion             actions= 0 time=7 usec                                                                                        |
+| #evaluate             actions=92 time=261 usec                                                                                      |
+| #emptybind            actions=25 time=46 usec                                                                                       |
+| #pushselect           actions= 0 time=16 usec                                                                                       |
+| #aliases              actions=117 time=43 usec                                                                                      |
+| #deadcode             actions=145 time=49 usec                                                                                      |
+| #weld                 actions=80 time=134 usec                                                                                      |
+| #aliases              actions= 0 time=1 usec                                                                                        |
+| #constants            actions=127 time=120 usec                                                                                     |
+| #commonTerms          actions= 0 time=10 usec                                                                                       |
+| #projectionpath       actions= 0 time=6 usec                                                                                        |
+| #deadcode             actions= 0 time=80 usec                                                                                       |
+| #matpack              actions= 0 time=0 usec                                                                                        |
+| #multiplex            actions= 0 time=3 usec                                                                                        |
+| #profiler             actions=1 time=2 usec                                                                                         |
+| #candidates           actions=1 time=2 usec                                                                                         |
+| #deadcode             actions= 0 time=19 usec                                                                                       |
+| #wlc                  actions= 0 time=1 usec                                                                                        |
+| #garbagecollector     actions= 1 time=199 usec                                                                                      |
+| #total                actions=25 time=1391 usec                                                                                     |
++-------------------------------------------------------------------------------------------------------------------------------------+
+122 tuples

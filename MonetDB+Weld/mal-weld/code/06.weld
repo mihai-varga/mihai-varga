@@ -1,0 +1,49 @@
+|v40:vec[i32], v40hseqbase:i64, v13:vec[i64], v13hseqbase:i64, v1:i32, v122:i32, v52:i8, v53:i8, v53:i8, v33:vec[i64], v33hseqbase:i64, v127:i64, v129:i64, v16:vec[i64], v16hseqbase:i64, v131:i64, v72:vec[i8], v26:vec[i64], v26hseqbase:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v51 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[i64], |b: appender[i64], i: i64, oid: i64|
+		if (v1 <= lookup(v40, oid - v40hseqbase)    &&    v122 > lookup(v40, oid - v40hseqbase),
+			merge(b, oid),
+			b
+		)
+	));
+let v51hseqbase = 0L;
+let v68 = result(
+	for (v51, appender[i64], |b: appender[i64], i: i64, oid: i64|
+		if (v127 <= lookup(v33, oid - v33hseqbase)    &&    v129 >= lookup(v33, oid - v33hseqbase),
+			merge(b, oid),
+			b
+		)
+	));
+let v68hseqbase = 0L;
+let v71 = result(
+	for (v68, appender[i64], |b: appender[i64], i: i64, oid: i64|
+		if (lookup(v16, oid - v16hseqbase) < v131,
+			merge(b, oid),
+			b
+		)
+	));
+let v71hseqbase = 0L;
+let v74 = result(
+	for (v71, appender[?], |b, i, oid|
+		merge(b, lookup(v26, oid - v26hseqbase))
+	));
+let v74hseqbase = 0L;
+let v75 = result(
+	for (v71, appender[?], |b, i, oid|
+		merge(b, lookup(v33, oid - v33hseqbase))
+	));
+let v75hseqbase = 0L;
+let v77 = result(
+	for (zip(v74, v75), appender[?], |b , i, x|
+		merge(b, ((x.$0) * (x.$1)))
+	));
+let v77hseqbase = 0L;
+let v80 = result(
+	for (v77, merger[i64, +], |b: merger[i64, +], i: i64, x: i64|
+		merge(b, x)
+	));
+{v80}
+
+
+============================================
+

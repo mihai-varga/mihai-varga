@@ -1,0 +1,188 @@
+|v13:vec[i64], v13hseqbase:i64, v26:vec[i32], v26hseqbase:i64, v161:vec[u16], v161hseqbase:i64, v161str:vec[i8], v161stroffset:i64, v152:vec[i64], v152hseqbase:i64, v4:vec[i8], v183:vec[i8], v168:vec[u16], v168hseqbase:i64, v168str:vec[i8], v168stroffset:i64, v6:vec[i8], v154:vec[i32], v154hseqbase:i64, v13:vec[i64], v13hseqbase:i64, v26:vec[i32], v26hseqbase:i64, v219:i32, v219:i32, v221:i8, v222:i64, v193:vec[i32], v193hseqbase:i64, v211:vec[i64], v211hseqbase:i64, v47:vec[i64], v47hseqbase:i64, v47:vec[i64], v47hseqbase:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v32 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v26, oid - v26hseqbase))
+	));
+let v32hseqbase = 0L;
+let v182 = result(
+	for (rangeiter(0L, 2000L, 1L), appender[i64], |b, i, oid|
+		let offset = lookup(v161, oid - v161hseqbase);
+
+		if (strslice(v161str, i64(offset) + v161stroffset) == v4,
+			merge(b, oid),
+			b
+		)
+	));
+let v182hseqbase = 0L;
+let v187 = result(
+	for (v182, appender[i64], |b, i, oid|
+		let offset = lookup(v168, oid - v168hseqbase);
+
+		if (strslice(v168str, i64(offset) + v168stroffset) == v6,
+			merge(b, oid),
+			b
+		)
+	));
+let v187hseqbase = 0L;
+let v188 = result(
+	for (v187, appender[?], |b, i, oid|
+		merge(b, lookup(v154, oid - v154hseqbase))
+	));
+let v188hseqbase = 0L;
+let v204 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v26, oid - v26hseqbase))
+	));
+let v204hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi32, {vec[i64], vec[i64], i32, i32}](v188, v204, v221, v222);
+let v217 = joinResult.$0;
+let v217bat = joinResult.$2;
+let v217hseqbase = 0L;
+let v218 = joinResult.$1;
+let v218bat = joinResult.$3;
+let v218hseqbase = 0L;
+let v223 = result(
+	for (v217, appender[?], |b, i, oid|
+		merge(b, lookup(v188, oid - v188hseqbase))
+	));
+let v223hseqbase = 0L;
+let joinResult = cudf[weldJoinNoCandListi32, {vec[i64], vec[i64], i32, i32}](v32, v223, v221, v222);
+let v233 = joinResult.$0;
+let v233bat = joinResult.$2;
+let v233hseqbase = 0L;
+let v234 = joinResult.$1;
+let v234bat = joinResult.$3;
+let v234hseqbase = 0L;
+let v198 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v193, oid - v193hseqbase))
+	));
+let v198hseqbase = 0L;
+let v226 = result(
+	for (v218, appender[?], |b, i, oid|
+		merge(b, lookup(v198, oid - v198hseqbase))
+	));
+let v226hseqbase = 0L;
+let v230 = result(
+	for(rangeiter(v226hseqbase, v226hseqbase + len(v226), 1L), appender[i64], |b, i, n|
+		merge(b, n)
+	));
+let v230hseqbase = 0L;
+let v259 = result(
+	for (v234, appender[?], |b, i, oid|
+		merge(b, lookup(v230, oid - v230hseqbase))
+	));
+let v259hseqbase = 0L;
+let groupHash = result(
+	for(zip(v259), dictmerger[ i64, i64, min], |b, i, n|
+		merge(b, { n, i})
+	));
+let groupHashVec = tovec(groupHash);
+let groupIdsDict = result(
+	for(groupHashVec, dictmerger[ i64, i64, min], |b, i, n|
+		merge(b, {n.$0, i})
+	));
+let empty = result(
+	for(rangeiter(0L, len(groupHashVec), 1L), appender[i64], |b, i, n|
+		merge(b, 0L)
+	));
+let ids = for(zip(v259), appender[i64], |b, i, n|
+	let groupId = lookup(groupIdsDict,  n);
+
+	merge(b, groupId));
+let counts = for(zip(v259), vecmerger[i64, +](empty), |b, i, n|
+	let groupId = lookup(groupIdsDict,  n);
+
+	merge(b, {groupId, 1L}));
+let v260 = result(ids);
+let v260hseqbase = 0L;
+let v262 = result(counts);
+let v262hseqbase = 0L;
+let v261 = result(
+	for(groupHashVec, vecmerger[i64, +](empty), |b, i, n|
+		merge(b, {i, lookup(groupHash, n.$0)})
+	));
+let v261hseqbase = 0L;
+let v216 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v211, oid - v211hseqbase))
+	));
+let v216hseqbase = 0L;
+let v229 = result(
+	for (v218, appender[?], |b, i, oid|
+		merge(b, lookup(v216, oid - v216hseqbase))
+	));
+let v229hseqbase = 0L;
+let v257 = result(
+	for (v234, appender[?], |b, i, oid|
+		merge(b, lookup(v229, oid - v229hseqbase))
+	));
+let v257hseqbase = 0L;
+let v264 = result(
+	for (v261, appender[?], |b, i, oid|
+		merge(b, lookup(v257, oid - v257hseqbase))
+	));
+let v264hseqbase = 0L;
+let v210 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v47, oid - v47hseqbase))
+	));
+let v210hseqbase = 0L;
+let v228 = result(
+	for (v218, appender[?], |b, i, oid|
+		merge(b, lookup(v210, oid - v210hseqbase))
+	));
+let v228hseqbase = 0L;
+let v256 = result(
+	for (v234, appender[?], |b, i, oid|
+		merge(b, lookup(v228, oid - v228hseqbase))
+	));
+let v256hseqbase = 0L;
+let v263 = result(
+	for (v261, appender[?], |b, i, oid|
+		merge(b, lookup(v256, oid - v256hseqbase))
+	));
+let v263hseqbase = 0L;
+let v53 = result(
+	for (rangeiter(0L, 60175L, 1L), appender[?], |b, i, oid|
+		merge(b, lookup(v47, oid - v47hseqbase))
+	));
+let v53hseqbase = 0L;
+let v239 = result(
+	for (v233, appender[?], |b, i, oid|
+		merge(b, lookup(v53, oid - v53hseqbase))
+	));
+let v239hseqbase = 0L;
+{v260, v261, v264, v263, v239}
+
+
+============================================
+
+|v278:vec[f64], v278hseqbase:i64, v276:vec[f64], v276hseqbase:i64, v271:i8, v221:i8, v264:vec[i64], v264hseqbase:i64,i8MIN:i8, i8MAX:i8, i32MIN:i32, i32MAX:i32, i64MIN:i64, i64MAX:i64, f32MIN:f32, f32MAX:f32, f64MIN:f64, f64MAX:f64,i8nil:i8, i32nil:i32, oidnil:i64, i64nil:i64, f32nil:f32, f64nil:f64|
+let v279 = result(
+	for (zip(v278, v276), appender[?], |b , i, x|
+		merge(b, i8((x.$0) < (x.$1)))
+	));
+let v279hseqbase = 0L;
+let v281 = result(
+	for (v279, appender[i64], |b: appender[i64], oid: i64, x|
+		if (v271 <= x    &&    v271 >= x,
+			merge(b, oid),
+			b
+		)
+	));
+let v281hseqbase = 0L;
+let v284 = result(
+	for (v281, appender[?], |b, i, oid|
+		merge(b, lookup(v264, oid - v264hseqbase))
+	));
+let v284hseqbase = 0L;
+let v286 = result(
+	for (v284, merger[i64, +], |b: merger[i64, +], i: i64, x: i64|
+		merge(b, x)
+	));
+{v286}
+
+
+============================================
+
